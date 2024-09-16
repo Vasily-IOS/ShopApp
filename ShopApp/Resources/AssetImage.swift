@@ -12,6 +12,7 @@ enum AssetImage {
     case onboardingOne
     case onboardingTwo
     case onboardingThree
+    case addFolder
 
     var image: Image {
         switch self {
@@ -23,6 +24,8 @@ enum AssetImage {
             return Image("onboardongTwo_icon")
         case .onboardingThree:
             return Image("onboardingThree_icon")
+        case .addFolder:
+            return Image("addFolder_icon")
         }
     }
 }

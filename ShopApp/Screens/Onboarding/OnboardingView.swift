@@ -21,51 +21,44 @@ struct OnboardingView: View {
                 numberOfPages: viewModel.pages.count,
                 currentPage: $viewModel.pageIndex
             )
-            .padding(.top)
 
             TabView(selection: $viewModel.pageIndex) {
                 ForEach(viewModel.pages) { page in
-                    VStack {
-                        Spacer()
-                        OnboardingPageView(onboardingModel: page)
-                        Spacer()
-
-                        Button {
-                            if !viewModel.isLastPage() {
-                                viewModel.pageIndex += 1
-                            } else {
-                                isOnboardingShowed = true
-                            }
-                        } label: {
-                            HStack {
-                                Spacer()
-                                Text(baseButtonTitle)
-                                    .font(.system(size: 20))
-                                    .foregroundColor(.white)
-                                Spacer()
-                            }
-                            .frame(height: 56)
-                            .background(Color(uiColor: .orange))
-                            .cornerRadius(10)
-                        }
-                        .padding(.horizontal, 16)
-
-                        Button {
-                            isOnboardingShowed = true
-                        } label: {
-                            Text(skipButtonTitle)
-                                .foregroundColor(viewModel.isLastPage() ? .clear : .gray)
-                        }
-                        .padding(.top, 5)
-
-                        Spacer()
-                    }
-                    .tag(page.tag)
+                    OnboardingPageView(onboardingModel: page)
+                        .tag(page.tag)
                 }
             }
             .animation(.easeInOut, value: viewModel.pageIndex)
             .tabViewStyle(.page(indexDisplayMode: .never))
+
+            Button {
+                if !viewModel.isLastPage() {
+                    viewModel.pageIndex += 1
+                } else {
+                    isOnboardingShowed = true
+                }
+            } label: {
+                HStack {
+                    Spacer()
+                    Text(baseButtonTitle)
+                        .font(.system(size: 20))
+                        .foregroundColor(.white)
+                    Spacer()
+                }
+                .frame(height: 56)
+                .background(Color(uiColor: .orange))
+                .cornerRadius(10)
+            }
+            .padding(.horizontal, 16)
+
+            Button {
+                isOnboardingShowed = true
+            } label: {
+                Text(skipButtonTitle)
+                    .foregroundColor(viewModel.isLastPage() ? .clear : .gray)
+            }
         }
+        .padding(.vertical, 25)
     }
 
     // MARK: - Instance methods
@@ -75,7 +68,7 @@ struct OnboardingView: View {
     }
 
     private var skipButtonTitle: String {
-        viewModel.isLastPage() ? "" : AssetString.skip.rawValue
+        viewModel.isLastPage() ? " " : AssetString.skip.rawValue
     }
 }
 

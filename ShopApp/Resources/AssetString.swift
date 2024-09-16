@@ -17,4 +17,8 @@ enum AssetString: String {
     case begin = "Начать"
     case `continue` = "Продолжить"
     case skip = "Пропустить"
+    case myLists = "Мои списки"
+    case createList = "+ Создать список"
+    case all = "Все"
+    case favourite = "Избранное"
 }
