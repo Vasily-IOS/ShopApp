@@ -12,6 +12,7 @@ final class AppRouter: ObservableObject {
     // MARK: - Instance methods
 
     enum Page: Identifiable, Hashable {
+        case main
 
         var id: String {
             UUID().uuidString
@@ -19,6 +20,7 @@ final class AppRouter: ObservableObject {
     }
 
     enum Sheet: Identifiable {
+        case addFolder((String) -> ())
 
         var id: String {
             UUID().uuidString
@@ -55,15 +57,17 @@ final class AppRouter: ObservableObject {
 
     @ViewBuilder
     func build(_ page: Page) -> some View {
-//        switch page {
-//
-//        }
+        switch page {
+        case .main:
+            MainView()
+        }
     }
 
     @ViewBuilder
     func build(_ page: Sheet) -> some View {
-//        switch page {
-//
-//        }
+        switch page {
+        case .addFolder(let onFolderNameEntered):
+            AddFolderView(onFolderNameEntered: onFolderNameEntered)
+        }
     }
 }

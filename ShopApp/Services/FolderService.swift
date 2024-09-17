@@ -2,61 +2,82 @@
 //  FolderService.swift
 //  ShopApp
 //
-//  Created by Василий on 16.09.2024.
+//  Created by Василий on 17.09.2024.
 //
 
-import Foundation
+// ЧТО ДОЛЖЕН ДЕЛАТЬ КЛАСС, ОТВЕЧАЮЩИЙ ЗА ПАПКИ
+// 1. Загружать сохраненные папки из хранилища
+// 2. Сохранять папку в хранилище
+// 3. Удалять папку из хранилища
 
-//@Observable
+// ЧТО ДОЛЖЕН ДЕЛАТЬ КЛАСС, ОТВЕЧАЮЩИЙ ЗА СПИСКИ
+// 1. Загружать сохраненные списки из хранилища по ключу
+// 2. Сохранять список в указанную папку
+// 3. Удалять список из папки
+// 4. Добавлять выбранный спикок в избранное
+// 5. Менять папку, в котором будет находиться список
+// 6. Переименовывать список
+
+// ВАЗИМОДЕЙСТВИЕ КЛАССОВ ПАПОК И СПИСКОВ
+// 1. В КЛАССЕ ПАПОК ВСЕГДА БУДЕТ ОБНОВЛЯТЬСЯ СВОЙСТВО "selectedFolderID"
+// 2. Также класс папок будет содержать класс списков
+// 3. Класс списков автоматом будет обновлять списки в зависимости от выбранной папки
+
+import SwiftUI
+
 final class FolderService: ObservableObject {
 
     // MARK: - Properties
 
-    @Published var folders: [FolderModel] = [] {
+    var baseFolders = [
+        FolderModel(id: 0, name: AssetString.all.rawValue),
+        FolderModel(id: 1, name: AssetString.favourite.rawValue)
+    ]
+
+    @Published var foldersForSave: [FolderModel] = [] {
         didSet {
-            updateFolderStorage(with: folders)
+            updateFolderStorage(foldersForSave)
         }
     }
+
+    @Published var selectedFolderID = 0
 
     // MARK: - Initializers
 
     init() {
-        loadFolders()
+        self.foldersForSave = loadSavedFolders()
     }
 
-    // MARK: - Instance methods
+    // MARK: - Public methods
 
-    func loadFolders() {
-        var baseFolders = [
-            FolderModel(id: 0, name: AssetString.all.rawValue),
-            FolderModel(id: 1, name: AssetString.favourite.rawValue)
-        ]
+    func addFolder(name: String) {
+        let id = (foldersForSave.last?.id ?? 1) + 1
+        print("Ай ди при добавлении \(id)")
+        let folder = FolderModel(id: id, name: name)
+        foldersForSave.append(folder)
+    }
 
-        do {
-            let savedFoldersData = UserDefaults.standard.data(forKey: StorageKey.savedFolders.rawValue) ?? Data()
-            let savedFolders = try JSONDecoder().decode([FolderModel].self, from: savedFoldersData)
-            baseFolders += savedFolders
-        } catch {
-            debugPrint(error)
+    func removeFolder(id: Int) {
+        guard id > 1 else { return }
+
+        let index = foldersForSave.firstIndex(where: { $0.id == id }) ?? 2
+        print("Индекс в массиве при удалении \(index)")
+        foldersForSave.remove(at: index)
+    }
+
+    // MARK: - Private methods
+
+    private func loadSavedFolders() -> [FolderModel] {
+        if let data = UserDefaults.standard.data(forKey: StorageKey.savedFolders.rawValue),
+           let arrayOfElements = try? JSONDecoder().decode([FolderModel].self, from: data) {
+           return arrayOfElements
         }
-
-        folders = baseFolders // + берем из хранилища
+        return []
     }
 
-    func addFolder(_ folder: FolderModel) {
-        folders.append(folder)
-    }
-
-    func removeFolder(_ indexForRemove: Int) {
-        folders.remove(at: indexForRemove)
-    }
-
-    func updateFolderStorage(with folders: [FolderModel]) {
-        do {
-            let encodableModel = try JSONEncoder().encode(folders)
-            UserDefaults.standard.setValue(encodableModel, forKey: StorageKey.savedFolders.rawValue)
-        } catch {
-            debugPrint(error)
+    private func updateFolderStorage(_ modelForSave: [FolderModel]) {
+        if let data = try? JSONEncoder().encode(modelForSave) {
+            UserDefaults.standard.set(data, forKey: StorageKey.savedFolders.rawValue)
         }
     }
 }
