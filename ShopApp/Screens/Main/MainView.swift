@@ -15,6 +15,11 @@ struct MainView: View {
 
     @EnvironmentObject var router: AppRouter
 
+    let columns = [
+        GridItem(.flexible(), spacing: 16),
+        GridItem(.flexible(), spacing: 16)
+    ]
+
     var body: some View {
         VStack {
             LabeledContent(AssetString.myLists.rawValue, value: "")
@@ -26,6 +31,7 @@ struct MainView: View {
                         ForEach(viewModel.baseFolders) { folder in
                             VStack {
                                 Text(folder.name)
+                                    .padding(.horizontal, 3)
                                 Rectangle()
                                     .frame(height: 1)
                                     .foregroundColor(viewModel.isSelected(folder.id) ? .orange : .clear)
@@ -37,6 +43,14 @@ struct MainView: View {
                         ForEach(viewModel.foldersForSave) { folder in
                             VStack {
                                 Text(folder.name)
+                                    .padding(.horizontal, 3)
+                                    .contextMenu {
+                                        Button {
+                                            viewModel.removeFolder(id: folder.id)
+                                        } label: {
+                                            Text(AssetString.removeFolderWithLists.rawValue)
+                                        }
+                                    }
                                 Rectangle()
                                     .frame(height: 1)
                                     .foregroundColor(viewModel.isSelected(folder.id) ? .orange : .clear)
@@ -52,20 +66,36 @@ struct MainView: View {
                     .resizable()
                     .frame(width: 25, height: 25)
                     .onTapGesture {
-                        router.present(.addItem(AssetString.newList.rawValue, AssetString.nameOfList.rawValue) { name in
-                            viewModel.addFolder(name: name)
+                        router.present(.addItem(AssetString.newFolder.rawValue, AssetString.nameOfFolder.rawValue) { name in
+                            viewModel.addFolder(name: name) {
+                                router.dismissSheet()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    viewModel.isAlertPresented.toggle()
+                                }
+                            }
                         })
+                    }
+                    .alert(isPresented: $viewModel.isAlertPresented) {
+                        Alert(title: Text(AssetString.folderNameAlreadyContains.rawValue))
                     }
             }
             .padding(.top, 15)
 
+            ScrollView(showsIndicators: false) {
+                LazyVGrid(columns: columns, spacing: 16) {
+                    ForEach(0..<20) { item in
+                        ListCellView(item: item)
+                    }
+                }
+                .padding(.top, 10)
+            }
+
             Spacer()
 
             Button {
-//                folderService.removeFolder(id: folderService.selectedFolderID)
-//                router.present(.addItem(AssetString.newFolder.rawValue, AssetString.nameOfFolder.rawValue) { result in
-//                    print(result)
-//                })
+                router.present(.addItem(AssetString.newList.rawValue, AssetString.nameOfList.rawValue) { result in
+                    print(result)
+                })
             } label: {
                 HStack {
                     Spacer()

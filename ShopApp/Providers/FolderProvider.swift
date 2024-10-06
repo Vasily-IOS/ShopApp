@@ -17,12 +17,12 @@ final class FolderProviderImpl: FolderProvider {
 
     // MARK: - Properties
 
-    private (set) var baseFolders = [
+    private var baseFolders = [
         FolderModel(id: 0, name: AssetString.all.rawValue),
         FolderModel(id: 1, name: AssetString.favourite.rawValue)
     ]
 
-    private (set) var foldersForSave: [FolderModel] = []
+    private var foldersForSave: [FolderModel] = []
 
     // MARK: - Initializers
 
