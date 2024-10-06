@@ -13,6 +13,9 @@ extension MainView {
 
         // MARK: - Properties
 
+        @Published var folderName: String = ""
+        
+
         // MARK: - Instance methods
     }
 }

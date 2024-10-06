@@ -1,27 +1,31 @@
 //
-//  AddFolderView.swift
+//  AddListOrFolderView.swift
 //  ShopApp
 //
-//  Created by Василий on 17.09.2024.
+//  Created by Василий on 06.10.2024.
 //
 
 import SwiftUI
 
-struct AddFolderView: View {
+struct AddListOrFolderView: View {
 
     // MARK: - Properties
 
-    var onFolderNameEntered: ((String) -> ())
+    var title: String
 
-    @State private var folderName = ""
+    var placeholder: String
+
+    var completion: ((String) -> ())
+
+    @State var itemName: String = ""
 
     @EnvironmentObject var router: AppRouter
 
     var body: some View {
         VStack {
-            Text(AssetString.newFolder.rawValue)
+            Text(title)
                 .font(.system(size: 20))
-            TextField(AssetString.nameOfFolder.rawValue, text: $folderName)
+            TextField(placeholder, text: $itemName)
                 .font(.system(size: 16))
                 .padding(.top, 16)
             Rectangle()
@@ -42,7 +46,8 @@ struct AddFolderView: View {
                 }
                 Spacer()
                 Button {
-                    onFolderNameEntered(folderName)
+                    router.dismissSheet()
+                    completion(itemName)
                 } label: {
                     HStack {
                         Text(AssetString.save.rawValue)

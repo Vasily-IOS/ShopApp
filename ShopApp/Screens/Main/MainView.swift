@@ -15,8 +15,6 @@ struct MainView: View {
 
     @EnvironmentObject var router: AppRouter
 
-    @State private var folderName: String = ""
-
     var body: some View {
         VStack {
             LabeledContent(AssetString.myLists.rawValue, value: "")
@@ -54,9 +52,8 @@ struct MainView: View {
                     .resizable()
                     .frame(width: 25, height: 25)
                     .onTapGesture {
-                        router.present(.addFolder { foldeName in
-                            router.sheet = nil
-                            folderService.addFolder(name: foldeName)
+                        router.present(.addItem(AssetString.newList.rawValue, AssetString.nameOfList.rawValue) { name in
+                            folderService.addFolder(name: name)
                         })
                     }
             }
@@ -65,7 +62,9 @@ struct MainView: View {
             Spacer()
 
             Button {
-                folderService.removeFolder(id: folderService.selectedFolderID)
+                router.present(.addItem(AssetString.newFolder.rawValue, AssetString.nameOfFolder.rawValue, { result in
+                    print(result)
+                }))
             } label: {
                 HStack {
                     Spacer()

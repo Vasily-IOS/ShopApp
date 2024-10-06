@@ -25,4 +25,6 @@ enum AssetString: String {
     case nameOfFolder = "Название папки"
     case save = "Сохранить"
     case cancel = "Отмена"
+    case newList = "Новый список"
+    case nameOfList = "Название списка"
 }

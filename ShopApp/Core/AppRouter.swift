@@ -20,7 +20,7 @@ final class AppRouter: ObservableObject {
     }
 
     enum Sheet: Identifiable {
-        case addFolder((String) -> ())
+        case addItem(String, String, (String) -> ())
 
         var id: String {
             UUID().uuidString
@@ -66,8 +66,12 @@ final class AppRouter: ObservableObject {
     @ViewBuilder
     func build(_ page: Sheet) -> some View {
         switch page {
-        case .addFolder(let onFolderNameEntered):
-            AddFolderView(onFolderNameEntered: onFolderNameEntered)
+        case let .addItem(title, placeholder, completion):
+            AddListOrFolderView(
+                title: title,
+                placeholder: placeholder,
+                completion: completion
+            )
         }
     }
 }

@@ -29,7 +29,7 @@ final class FolderService: ObservableObject {
 
     // MARK: - Properties
 
-    var baseFolders = [
+    private (set) var baseFolders = [
         FolderModel(id: 0, name: AssetString.all.rawValue),
         FolderModel(id: 1, name: AssetString.favourite.rawValue)
     ]
@@ -51,6 +51,8 @@ final class FolderService: ObservableObject {
     // MARK: - Public methods
 
     func addFolder(name: String) {
+        guard !(baseFolders + foldersForSave).contains(where: { $0.name == name }) else { return }
+
         let id = (foldersForSave.last?.id ?? 1) + 1
         print("Ай ди при добавлении \(id)")
         let folder = FolderModel(id: id, name: name)
@@ -58,8 +60,6 @@ final class FolderService: ObservableObject {
     }
 
     func removeFolder(id: Int) {
-        guard id > 1 else { return }
-
         let index = foldersForSave.firstIndex(where: { $0.id == id }) ?? 2
         print("Индекс в массиве при удалении \(index)")
         foldersForSave.remove(at: index)
