@@ -11,7 +11,7 @@ struct MainView: View {
 
     // MARK: - Properties
 
-    @StateObject private var folderService = FolderService()
+    @StateObject private var viewModel = ViewModel()
 
     @EnvironmentObject var router: AppRouter
 
@@ -23,26 +23,26 @@ struct MainView: View {
             HStack {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
-                        ForEach(folderService.baseFolders) { folder in
+                        ForEach(viewModel.baseFolders) { folder in
                             VStack {
                                 Text(folder.name)
                                 Rectangle()
                                     .frame(height: 1)
-                                    .foregroundColor(folderService.selectedFolderID == folder.id ? .orange : .clear)
+                                    .foregroundColor(viewModel.isSelected(folder.id) ? .orange : .clear)
                             }
                             .onTapGesture {
-                                folderService.selectedFolderID = folder.id
+                                viewModel.selectedFolderID = folder.id
                             }
                         }
-                        ForEach(folderService.foldersForSave) { folder in
+                        ForEach(viewModel.foldersForSave) { folder in
                             VStack {
                                 Text(folder.name)
                                 Rectangle()
                                     .frame(height: 1)
-                                    .foregroundColor(folderService.selectedFolderID == folder.id ? .orange : .clear)
+                                    .foregroundColor(viewModel.isSelected(folder.id) ? .orange : .clear)
                             }
                             .onTapGesture {
-                                folderService.selectedFolderID = folder.id
+                                viewModel.selectedFolderID = folder.id
                             }
                         }
                     }
@@ -53,7 +53,7 @@ struct MainView: View {
                     .frame(width: 25, height: 25)
                     .onTapGesture {
                         router.present(.addItem(AssetString.newList.rawValue, AssetString.nameOfList.rawValue) { name in
-                            folderService.addFolder(name: name)
+                            viewModel.addFolder(name: name)
                         })
                     }
             }
@@ -62,9 +62,10 @@ struct MainView: View {
             Spacer()
 
             Button {
-                router.present(.addItem(AssetString.newFolder.rawValue, AssetString.nameOfFolder.rawValue, { result in
-                    print(result)
-                }))
+//                folderService.removeFolder(id: folderService.selectedFolderID)
+//                router.present(.addItem(AssetString.newFolder.rawValue, AssetString.nameOfFolder.rawValue) { result in
+//                    print(result)
+//                })
             } label: {
                 HStack {
                     Spacer()
