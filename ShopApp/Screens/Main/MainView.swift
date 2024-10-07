@@ -15,7 +15,7 @@ struct MainView: View {
 
     @EnvironmentObject var router: AppRouter
 
-    let columns = [
+    private let columns = [
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16)
     ]

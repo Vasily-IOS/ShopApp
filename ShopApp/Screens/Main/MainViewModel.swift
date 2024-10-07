@@ -36,6 +36,8 @@ extension MainView {
 
         // MARK: - Instance methods
 
+        // повесить эвенты // sendEvent..
+
         func addFolder(name: String, completion: (() -> ())) {
             guard !(baseFolders + foldersForSave).contains(where: { $0.name == name }) else {
                 completion()
