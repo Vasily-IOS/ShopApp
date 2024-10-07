@@ -13,6 +13,7 @@ final class AppRouter: ObservableObject {
 
     enum Page: Identifiable, Hashable {
         case main
+        case createList
 
         var id: String {
             UUID().uuidString
@@ -60,6 +61,8 @@ final class AppRouter: ObservableObject {
         switch page {
         case .main:
             MainView()
+        case .createList:
+            CreateListView()
         }
     }
 

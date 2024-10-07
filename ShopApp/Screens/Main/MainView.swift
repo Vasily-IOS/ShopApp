@@ -81,21 +81,19 @@ struct MainView: View {
             }
             .padding(.top, 15)
 
-            ScrollView(showsIndicators: false) {
-                LazyVGrid(columns: columns, spacing: 16) {
-                    ForEach(0..<20) { item in
-                        ListCellView(item: item)
-                    }
-                }
-                .padding(.top, 10)
-            }
+//            ScrollView(showsIndicators: false) {
+//                LazyVGrid(columns: columns, spacing: 16) {
+//                    ForEach(0..<20) { item in
+//                        ListCellView(item: item)
+//                    }
+//                }
+//                .padding(.top, 10)
+//            }
 
             Spacer()
 
             Button {
-                router.present(.addItem(AssetString.newList.rawValue, AssetString.nameOfList.rawValue) { result in
-                    print(result)
-                })
+                router.push(.createList)
             } label: {
                 HStack {
                     Spacer()
