@@ -16,6 +16,7 @@ enum AssetImage {
     case backArrow
     case settings
     case search
+    case cross
 
     var image: Image {
         switch self {
@@ -35,6 +36,8 @@ enum AssetImage {
             return Image("settings_icon")
         case .search:
             return Image("search_icon")
+        case .cross:
+            return Image("cross_icon")
         }
     }
 }

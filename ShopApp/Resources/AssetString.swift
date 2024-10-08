@@ -29,4 +29,6 @@ enum AssetString: String {
     case nameOfList = "Название списка"
     case removeFolderWithLists = "Удалить папку и все списки в этой папке?"
     case folderNameAlreadyContains = "Папка с таким именем уже существует"
+    case enterItemName = "Введите название товара"
+    case settingsCorrect = "Настройки списка"
 }

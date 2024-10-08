@@ -27,6 +27,8 @@ extension MainView {
 
         private let folderProvider: FolderProvider = FolderProviderImpl()
 
+        private let itemsProvider: ItemsProvider = ItemsProviderImpl()
+
         // MARK: - Initializers
 
         init() {
@@ -58,6 +60,10 @@ extension MainView {
 
         func isSelected(_ id: Int) -> Bool {
             id == selectedFolderID
+        }
+
+        func getItems() -> [Item] {
+            itemsProvider.items
         }
     }
 }

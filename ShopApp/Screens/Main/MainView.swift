@@ -93,7 +93,7 @@ struct MainView: View {
             Spacer()
 
             Button {
-                router.push(.createList)
+                router.push(.createList(viewModel.getItems()))
             } label: {
                 HStack {
                     Spacer()

@@ -25,9 +25,9 @@ struct ScreenSettings: ViewModifier {
 
     var isSettingsButtonHidden: Bool
 
-    var onSettingsButtonTap: (() -> ())?
-
     var title: String
+
+    var onSettingsButtonTap: (() -> ())?
 
     var settingsButton: some View {
         Button {
@@ -57,8 +57,8 @@ extension View {
         leading: Double = 16.0,
         trailing: Double = 16.0,
         isSettingsButtonHidden: Bool = true,
-        onSettingsButtonTap: (() -> ())? = nil,
-        title: String = "Новый список"
+        title: String = "Новый список",
+        onSettingsButtonTap: (() -> ())? = nil
     ) -> some View {
         modifier(
             ScreenSettings(
@@ -68,8 +68,8 @@ extension View {
                 leading: leading,
                 trailing: trailing,
                 isSettingsButtonHidden: isSettingsButtonHidden,
-                onSettingsButtonTap: onSettingsButtonTap,
-                title: title
+                title: title,
+                onSettingsButtonTap: onSettingsButtonTap
             )
         )
     }
