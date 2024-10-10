@@ -11,7 +11,7 @@ struct CreateListView: View {
 
     // MARK: - Properties
 
-    var items: [Item]
+    var itemListModel: ItemListModel
 
     @ObservedObject private var viewModel = ViewModel()
 
@@ -37,27 +37,43 @@ struct CreateListView: View {
             )
 
             GeometryReader { geometry in
-                Text("\(geometry.size.height)")
-                    .padding(.bottom, 30)
-
                 ScrollView(.vertical, showsIndicators: false) {
                     generateContent(in: geometry)
                 }
             }
-            .frame(height: !viewModel.sortedItems.isEmpty ? UIScreen.main.bounds.height * 0.2 : 0)
-            .animation(.smooth, value: !viewModel.sortedItems.isEmpty)
-            Text("Test text")
+            .frame(height: !viewModel.sortedItems.isEmpty ? 71.5 : 0)
+            
+            Divider()
+                .frame(height: 1)
+                .background(.black)
+                .hidden(viewModel.sortedItems.isEmpty)
+
+            VStack(spacing: 5) {
+                ForEach(itemListModel.itemsCategory) { category in
+                    if category == itemListModel.itemsCategory.first {
+                        ProductChapterCell(categoryName: category.name)
+                            .cornerRadius(15, corners: [.topLeft, .topRight])
+                    } else if category == itemListModel.itemsCategory.last {
+                        ProductChapterCell(categoryName: category.name)
+                            .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
+                    } else {
+                        ProductChapterCell(categoryName: category.name)
+                    }
+                }
+            }
 
             Spacer()
         }
         .onChange(of: viewModel.inputText) { _, newValue in
             let findTargetString = newValue.trimmingCharacters(in: .whitespaces)
-            viewModel.sortedItems = items.filter { $0.name.lowercased().contains(findTargetString.lowercased()) }
+            viewModel.sortedItems = itemListModel.items.filter { $0.name.lowercased().contains(findTargetString.lowercased()) }
         }
         .screenSettings(isSettingsButtonHidden: false) {
             router.push(.settings)
         }
     }
+
+    // MARK: - Instance methods
 
     private func generateContent(in g: GeometryProxy) -> some View {
         var width = CGFloat.zero
@@ -74,7 +90,8 @@ struct CreateListView: View {
                             height -= d.height
                         }
                         let result = width
-                        if item == viewModel.sortedItems.first! {
+
+                        if item == viewModel.sortedItems.first {
                             width = 0 //last item
                         } else {
                             width -= d.width
@@ -83,12 +100,34 @@ struct CreateListView: View {
                     })
                     .alignmentGuide(.top, computeValue: { d in
                         let result = height
-                        if item == viewModel.sortedItems.first! {
+                        if item == viewModel.sortedItems.first {
                             height = 0 // last item
                         }
                         return result
                     })
             }
         }
+    }
+}
+
+struct RoundedCorner: Shape {
+    let radius: CGFloat
+    let corners: UIRectCorner
+
+    init(radius: CGFloat = .infinity, corners: UIRectCorner = .allCorners) {
+        self.radius = radius
+        self.corners = corners
+    }
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        return Path(path.cgPath)
+    }
+}
+
+
+extension View {
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape( RoundedCorner(radius: radius, corners: corners) )
     }
 }

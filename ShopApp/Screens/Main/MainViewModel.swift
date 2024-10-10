@@ -62,8 +62,8 @@ extension MainView {
             id == selectedFolderID
         }
 
-        func getItems() -> [Item] {
-            itemsProvider.items
+        func getItems() -> ItemListModel {
+            itemsProvider.itemList
         }
     }
 }

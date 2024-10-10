@@ -13,7 +13,7 @@ final class AppRouter: ObservableObject {
 
     enum Page: Identifiable, Hashable {
         case main
-        case createList([Item])
+        case createList(ItemListModel)
         case settings
 
         var id: String {
@@ -62,8 +62,8 @@ final class AppRouter: ObservableObject {
         switch page {
         case .main:
             MainView()
-        case .createList(let items):
-            CreateListView(items: items)
+        case .createList(let itemListModel):
+            CreateListView(itemListModel: itemListModel)
         case .settings:
             SettingsView()
         }
