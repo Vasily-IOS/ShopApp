@@ -11,11 +11,9 @@ struct CreateListView: View {
 
     // MARK: - Properties
 
-    @State var inputText = ""
-
     var items: [Item]
 
-    @State var sortedItems: [Item] = []
+    @ObservedObject private var viewModel = ViewModel()
 
     @EnvironmentObject var router: AppRouter
 
@@ -24,11 +22,11 @@ struct CreateListView: View {
             HStack {
                 AssetImage.search.image
                     .padding(.leading, 7)
-                TextField(AssetString.enterItemName.rawValue, text: $inputText)
+                TextField(AssetString.enterItemName.rawValue, text: $viewModel.inputText)
                 AssetImage.cross.image
-                    .hidden(inputText.isEmpty)
+                    .hidden(viewModel.inputText.isEmpty)
                     .onTapGesture {
-                        inputText = ""
+                        viewModel.clearInput()
                     }
                 Spacer()
             }
@@ -39,16 +37,22 @@ struct CreateListView: View {
             )
 
             GeometryReader { geometry in
+                Text("\(geometry.size.height)")
+                    .padding(.bottom, 30)
+
                 ScrollView(.vertical, showsIndicators: false) {
                     generateContent(in: geometry)
                 }
-                .frame(height: UIScreen.main.bounds.height * 0.3)
             }
+            .frame(height: !viewModel.sortedItems.isEmpty ? UIScreen.main.bounds.height * 0.2 : 0)
+            .animation(.smooth, value: !viewModel.sortedItems.isEmpty)
+            Text("Test text")
 
             Spacer()
         }
-        .onChange(of: inputText) { _, value in
-            sortedItems = items.filter { $0.name.lowercased().contains(value.lowercased()) }
+        .onChange(of: viewModel.inputText) { _, newValue in
+            let findTargetString = newValue.trimmingCharacters(in: .whitespaces)
+            viewModel.sortedItems = items.filter { $0.name.lowercased().contains(findTargetString.lowercased()) }
         }
         .screenSettings(isSettingsButtonHidden: false) {
             router.push(.settings)
@@ -60,9 +64,9 @@ struct CreateListView: View {
         var height = CGFloat.zero
 
         return ZStack(alignment: .topLeading) {
-            ForEach(self.sortedItems, id: \.self) { sortedItems in
-                self.item(for: sortedItems)
-                    .padding([.horizontal, .vertical], 4)
+            ForEach(viewModel.sortedItems, id: \.self) { item in
+                CustomCellView(item: item)
+                    .padding(.all, 4)
                     .alignmentGuide(.leading, computeValue: { d in
                         if (abs(width - d.width) > g.size.width)
                         {
@@ -70,7 +74,7 @@ struct CreateListView: View {
                             height -= d.height
                         }
                         let result = width
-                        if sortedItems == self.sortedItems.first! {
+                        if item == viewModel.sortedItems.first! {
                             width = 0 //last item
                         } else {
                             width -= d.width
@@ -79,21 +83,12 @@ struct CreateListView: View {
                     })
                     .alignmentGuide(.top, computeValue: { d in
                         let result = height
-                        if sortedItems == self.sortedItems.first! {
+                        if item == viewModel.sortedItems.first! {
                             height = 0 // last item
                         }
                         return result
                     })
             }
         }
-    }
-
-    func item(for item: Item) -> some View {
-        Text(item.name)
-            .padding(.all, 5)
-            .font(.body)
-            .background(Color.blue)
-            .foregroundColor(Color.white)
-            .cornerRadius(5)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  ShopAppApp.swift
+//  ShopApp.swift
 //  ShopApp
 //
 //  Created by Василий on 13.09.2024.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct ShopAppApp: App {
+struct ShopApp: App {
 
     // MARK: - Properties
 
