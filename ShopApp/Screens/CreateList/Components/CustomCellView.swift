@@ -17,7 +17,23 @@ struct CustomCellView: View {
         Text(item.name)
             .padding(.vertical, 3)
             .padding(.horizontal, 7)
-            .background(Color.mainBlue)
+            .background(makeCellColor())
             .cornerRadius(15)
+            .foregroundColor(.white)
+    }
+
+    // MARK: - Instance methods
+
+    private func makeCellColor() -> Color {
+        switch item.color {
+        case "systemTeal": // 11
+            return .teal
+        case "pink": // 12
+            return .pink
+        case "green":
+            return .green
+        default: // default
+            return .white
+        }
     }
 }

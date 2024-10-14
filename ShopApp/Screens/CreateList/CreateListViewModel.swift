@@ -13,7 +13,7 @@ extension CreateListView {
 
         // MARK: - Properties
 
-        @Published var sortedItems: [Item] = []
+        @Published var sortedCategories: [Category] = []
 
         @Published var inputText: String = ""
 
@@ -21,6 +21,7 @@ extension CreateListView {
 
         func clearInput() {
             inputText = ""
+            sortedCategories = []
         }
     }
 }

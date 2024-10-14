@@ -36,17 +36,16 @@ struct CreateListView: View {
                     .stroke(.black.opacity(0.5))
             )
 
-            GeometryReader { geometry in
-                ScrollView(.vertical, showsIndicators: false) {
-                    generateContent(in: geometry)
+            VStack {
+                ForEach(viewModel.sortedCategories) { category in
+                    FoundedItemsScrollView(items: category.items)
                 }
             }
-            .frame(height: !viewModel.sortedItems.isEmpty ? 71.5 : 0)
-            
+
             Divider()
                 .frame(height: 1)
                 .background(.black)
-                .hidden(viewModel.sortedItems.isEmpty)
+                .hidden(viewModel.sortedCategories.isEmpty)
 
             VStack(spacing: 5) {
                 ForEach(itemListModel.itemsCategory) { category in
@@ -66,68 +65,25 @@ struct CreateListView: View {
         }
         .onChange(of: viewModel.inputText) { _, newValue in
             let findTargetString = newValue.trimmingCharacters(in: .whitespaces)
-            viewModel.sortedItems = itemListModel.items.filter { $0.name.lowercased().contains(findTargetString.lowercased()) }
+
+            // все найденные айтемы
+            let allFoundedItems = itemListModel.items.filter {
+                $0.name.lowercased().contains(findTargetString.lowercased())
+            }
+            // доступные категории
+            let categ = Array(Set(allFoundedItems.map { $0.category })).sorted()
+
+            // кновертированная модель
+            viewModel.sortedCategories = categ.map { categoryID in
+                Category(
+                    id: categoryID,
+                    name: "",
+                    items: allFoundedItems.filter { $0.category == categoryID }
+                )
+            }
         }
         .screenSettings(isSettingsButtonHidden: false) {
             router.push(.settings)
         }
-    }
-
-    // MARK: - Instance methods
-
-    private func generateContent(in g: GeometryProxy) -> some View {
-        var width = CGFloat.zero
-        var height = CGFloat.zero
-
-        return ZStack(alignment: .topLeading) {
-            ForEach(viewModel.sortedItems, id: \.self) { item in
-                CustomCellView(item: item)
-                    .padding(.all, 4)
-                    .alignmentGuide(.leading, computeValue: { d in
-                        if (abs(width - d.width) > g.size.width)
-                        {
-                            width = 0
-                            height -= d.height
-                        }
-                        let result = width
-
-                        if item == viewModel.sortedItems.first {
-                            width = 0 //last item
-                        } else {
-                            width -= d.width
-                        }
-                        return result
-                    })
-                    .alignmentGuide(.top, computeValue: { d in
-                        let result = height
-                        if item == viewModel.sortedItems.first {
-                            height = 0 // last item
-                        }
-                        return result
-                    })
-            }
-        }
-    }
-}
-
-struct RoundedCorner: Shape {
-    let radius: CGFloat
-    let corners: UIRectCorner
-
-    init(radius: CGFloat = .infinity, corners: UIRectCorner = .allCorners) {
-        self.radius = radius
-        self.corners = corners
-    }
-
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
-        return Path(path.cgPath)
-    }
-}
-
-
-extension View {
-    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape( RoundedCorner(radius: radius, corners: corners) )
     }
 }

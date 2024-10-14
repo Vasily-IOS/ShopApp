@@ -9,5 +9,5 @@ import Foundation
 
 struct ItemListModel: Equatable, Hashable {
     var items: [Item] = []
-    var itemsCategory: [Items] = []
+    var itemsCategory: [Category] = []
 }

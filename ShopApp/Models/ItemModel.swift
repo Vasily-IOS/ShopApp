@@ -8,10 +8,10 @@
 import Foundation
 
 struct Json: Codable, Equatable, Hashable {
-    let data: Items
+    let data: Category
 }
 
-struct Items: Codable, Identifiable, Equatable, Hashable {
+struct Category: Codable, Identifiable, Equatable, Hashable {
     let id: Int
     let name: String
     let items: [Item]
@@ -19,5 +19,7 @@ struct Items: Codable, Identifiable, Equatable, Hashable {
 
 struct Item: Codable, Identifiable, Equatable, Hashable {
     let id: Int
+    let category: Int
+    let color: String
     let name: String
 }

@@ -45,9 +45,9 @@ final class ItemsProviderImpl: ItemsProvider {
         }
     }
 
-    private func generateItemsCategories() async -> [Items] {
-        var result = [Items]()
-        await withTaskGroup(of: Items.self) { group in
+    private func generateItemsCategories() async -> [Category] {
+        var result = [Category]()
+        await withTaskGroup(of: Category.self) { group in
             for type in productTypes {
                 group.addTask {
                     await self.decodeItem(by: type)!
@@ -61,7 +61,7 @@ final class ItemsProviderImpl: ItemsProvider {
         return result
     }
 
-    private func decodeItem(by type: ProductType) async -> Items? {
+    private func decodeItem(by type: ProductType) async -> Category? {
         do {
             if let url = Bundle.main.url(forResource: type.rawValue, withExtension: "json") {
                 let data = try Data(contentsOf: url)
