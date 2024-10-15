@@ -32,6 +32,18 @@ struct CustomCellView: View {
             return .pink
         case "green":
             return .green
+        case "orange":
+            return .orange
+        case "blue":
+            return .blue
+        case "red":
+            return .red
+        case "brown":
+            return .brown
+        case "blueWithOpacity":
+            return .blue.opacity(0.7)
+        case "cyan":
+            return .cyan
         default: // default
             return .white
         }

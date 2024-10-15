@@ -8,9 +8,16 @@
 import Foundation
 
 enum ProductType: String {
+    case meatAndFish = "meatAndFish" // 4. Мясо и рыба
+    case grainProducts = "grainProducts" // 5. Зерновые продукты
+    case frozenAndReadyToCookProduct = "frozenAndReadyToCookProduct" // 6. Заморозка и полуфабрикаты
+    case ingredientsAndFlavorings = "ingredientsAndFlavorings" // 7. Ингредиенты и специи
+    case snacksAndSweets = "snacksAndSweets" // 8. Закуски и сладости
+    case beverageAssortment = "beverageAssortment" // 9. Напитки
     case healthAndBeauty = "healthAndBeauty" // красота и здоровье
     case petCareEssentials = "petCareEssentials" // зоотовары
     case workTools = "workTools" // рабочие инструменты
+    case householdEssentials = "householdEssentials" // домашнее хозяйство
 }
 
 protocol ItemsProvider {
@@ -24,6 +31,13 @@ final class ItemsProviderImpl: ItemsProvider {
     private (set) var itemList = ItemListModel()
 
     private let productTypes: [ProductType] = [
+        .meatAndFish,
+        .grainProducts,
+        .frozenAndReadyToCookProduct,
+        .ingredientsAndFlavorings,
+        .snacksAndSweets,
+        .beverageAssortment,
+        .householdEssentials,
         .healthAndBeauty,
         .petCareEssentials,
         .workTools
