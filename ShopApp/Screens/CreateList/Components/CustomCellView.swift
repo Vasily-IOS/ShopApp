@@ -19,16 +19,16 @@ struct CustomCellView: View {
             .padding(.horizontal, 7)
             .background(makeCellColor())
             .cornerRadius(15)
-            .foregroundColor(.white)
+            .foregroundColor(makeCellTextLabelColor())
     }
 
     // MARK: - Instance methods
 
     private func makeCellColor() -> Color {
         switch item.color {
-        case "systemTeal": // 11
+        case "systemTeal":
             return .teal
-        case "pink": // 12
+        case "pink":
             return .pink
         case "green":
             return .green
@@ -44,7 +44,18 @@ struct CustomCellView: View {
             return .blue.opacity(0.7)
         case "cyan":
             return .cyan
-        default: // default
+        case "gray":
+            return .gray
+        default:
+            return .white
+        }
+    }
+
+    private func makeCellTextLabelColor() -> Color {
+        switch item.color {
+        case "white":
+            return .black
+        default:
             return .white
         }
     }

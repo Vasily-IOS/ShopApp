@@ -8,6 +8,9 @@
 import Foundation
 
 enum ProductType: String {
+    case vegetablesFruitsAndBerries = "vegetablesFruitsAndBerries" // 1. Фрукты и овощи
+    case breadAndPastries = "breadAndPastries" // 2. Хлеб и выпечка
+    case milkAndCheese = "milkAndCheese" // 3. Молоко и сыр
     case meatAndFish = "meatAndFish" // 4. Мясо и рыба
     case grainProducts = "grainProducts" // 5. Зерновые продукты
     case frozenAndReadyToCookProduct = "frozenAndReadyToCookProduct" // 6. Заморозка и полуфабрикаты
@@ -31,6 +34,9 @@ final class ItemsProviderImpl: ItemsProvider {
     private (set) var itemList = ItemListModel()
 
     private let productTypes: [ProductType] = [
+        .vegetablesFruitsAndBerries,
+        .breadAndPastries,
+        .milkAndCheese,
         .meatAndFish,
         .grainProducts,
         .frozenAndReadyToCookProduct,
