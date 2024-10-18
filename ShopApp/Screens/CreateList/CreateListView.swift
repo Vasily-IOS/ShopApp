@@ -8,44 +8,46 @@
 import SwiftUI
 
 struct CreateListView: View {
-    
+
     // MARK: - Properties
 
     @State var viewModel: ViewModel
 
     @EnvironmentObject var router: AppRouter
-    
+
     var body: some View {
-        VStack {
-            HStack {
-                AssetImage.search.image
-                    .padding(.leading, 7)
-                TextField(AssetString.enterItemName.rawValue, text: $viewModel.inputText)
-                AssetImage.cross.image
-                    .hidden(viewModel.inputText.isEmpty)
-                    .onTapGesture {
-                        viewModel.sendEvent(.cleanInput)
-                    }
-                Spacer()
-            }
-            .frame(maxWidth: .infinity, maxHeight: 36)
-            .overlay(
-                RoundedRectangle(cornerRadius: 15)
-                    .stroke(.black.opacity(0.5))
-            )
-            
+        ScrollView(showsIndicators: false) {
             VStack {
-                ForEach(viewModel.sortedCategories) { category in
-                    FoundedItemsScrollView(products: category.products)
+                HStack {
+                    AssetImage.search.image
+                        .padding(.leading, 7)
+                    TextField(AssetString.enterItemName.rawValue, text: $viewModel.inputText)
+                    AssetImage.cross.image
+                        .hidden(viewModel.inputText.isEmpty)
+                        .onTapGesture {
+                            viewModel.sendEvent(.cleanInput)
+                        }
+                    Spacer()
                 }
-                Spacer()
+                .frame(maxWidth: .infinity, minHeight: 46)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(.black.opacity(0.5))
+                )
+
+                VStack {
+                    ForEach(viewModel.sortedCategories) { category in
+                        FoundedItemsScrollView(products: category.products)
+                    }
+                    Spacer()
+                }
             }
-        }
-        .onChange(of: viewModel.inputText) { _, newValue in
-            viewModel.sendEvent(.sort(text: newValue))
-        }
-        .screenSettings(isSettingsButtonHidden: false) {
-            router.push(.settings)
+            .onChange(of: viewModel.inputText) { _, newValue in
+                viewModel.sendEvent(.sort(text: newValue))
+            }
+            .screenSettings(isSettingsButtonHidden: false) {
+                router.push(.settings)
+            }
         }
     }
 }
