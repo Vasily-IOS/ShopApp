@@ -18,6 +18,7 @@ struct FoundedItemsScrollView: View {
             HStack {
                 ForEach(items) { item in
                     ProductCellView(item: item)
+                        .padding(.all, 1)
                 }
             }
         }

@@ -20,6 +20,12 @@ struct ProductCellView: View {
             .background(makeCellColor())
             .cornerRadius(15)
             .foregroundColor(makeCellTextLabelColor())
+            .overlay(
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(.black, lineWidth: 0.5)
+                    .hidden(item.color != "white")
+            )
+
     }
 
     // MARK: - Instance methods

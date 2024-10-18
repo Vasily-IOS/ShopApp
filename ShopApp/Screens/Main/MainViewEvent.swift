@@ -7,12 +7,7 @@
 
 import Foundation
 
-extension MainView.ViewModel {
-
-    // MARK: - Nested types
-
-    enum Event {
-        case addFolder(String)
-        case removeFolder(Int)
-    }
+enum MainViewEvent {
+    case addFolder(String)
+    case removeFolder(Int)
 }

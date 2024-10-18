@@ -24,7 +24,7 @@ struct CreateListView: View {
                 AssetImage.cross.image
                     .hidden(viewModel.inputText.isEmpty)
                     .onTapGesture {
-                        viewModel.clearInput()
+                        viewModel.sendEvent(.cleanInput)
                     }
                 Spacer()
             }
@@ -42,23 +42,7 @@ struct CreateListView: View {
             }
         }
         .onChange(of: viewModel.inputText) { _, newValue in
-//            let findTargetString = newValue.trimmingCharacters(in: .whitespaces)
-//            
-//            // все найденные айтемы
-//            let allFoundedItems = viewModel.itemListModel.items.filter {
-//                $0.name.lowercased().contains(findTargetString.lowercased())
-//            }
-//            // доступные категории
-//            let categ = Array(Set(allFoundedItems.map { $0.category })).sorted()
-//            
-//            // кновертированная модель
-//            viewModel.sortedCategories = categ.map { categoryID in
-//                Category(
-//                    id: categoryID,
-//                    name: "",
-//                    items: allFoundedItems.filter { $0.category == categoryID }
-//                )
-//            }
+            viewModel.sendEvent(.sort(text: newValue))
         }
         .screenSettings(isSettingsButtonHidden: false) {
             router.push(.settings)

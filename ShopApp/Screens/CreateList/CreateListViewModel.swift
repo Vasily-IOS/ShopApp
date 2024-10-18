@@ -28,9 +28,40 @@ extension CreateListView {
 
         // MARK: - Instance methods
 
-        func clearInput() {
-            inputText = ""
-            sortedCategories = []
+        func sendEvent(_ event: CreateListEvent) {
+            switch event {
+            case .cleanInput:
+                clearInput()
+            case .sort(let text):
+                sortProducts(by: text)
+            }
+        }
+
+        // MARK: - Private methods
+
+        private func clearInput() {
+            inputText.removeAll()
+            sortedCategories.removeAll()
+        }
+
+        private func sortProducts(by string: String) {
+            let findTargetString = string.trimmingCharacters(in: .whitespaces)
+
+            // все найденные айтемы
+            let allFoundedItems = itemListModel.items.filter {
+                $0.name.lowercased().contains(findTargetString.lowercased())
+            }
+            // доступные категории
+            let categ = Array(Set(allFoundedItems.map { $0.category })).sorted()
+
+            // кновертированная модель
+            sortedCategories = categ.map { categoryID in
+                Category(
+                    id: categoryID,
+                    name: "",
+                    items: allFoundedItems.filter { $0.category == categoryID }
+                )
+            }
         }
     }
 }
