@@ -14,7 +14,7 @@ final class AppRouter: ObservableObject {
 
     enum Page: Identifiable, Hashable {
         case main
-        case createList(ItemListModel)
+        case createList(ProductsListModel)
         case settings
 
         var id: String {

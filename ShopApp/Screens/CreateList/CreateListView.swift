@@ -36,7 +36,7 @@ struct CreateListView: View {
             
             VStack {
                 ForEach(viewModel.sortedCategories) { category in
-                    FoundedItemsScrollView(items: category.items)
+                    FoundedItemsScrollView(products: category.products)
                 }
                 Spacer()
             }

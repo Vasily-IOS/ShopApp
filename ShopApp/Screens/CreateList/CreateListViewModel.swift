@@ -14,19 +14,19 @@ extension CreateListView {
 
         // MARK: - Properties
 
-        var sortedCategories: [Category] = []
+        var sortedCategories: [ProductCategoryModel] = []
 
         var inputText: String = ""
 
-        let itemListModel: ItemListModel
+        let productsListModel: ProductsListModel
 
         // MARK: - Initializers
 
-        init(itemListModel: ItemListModel) {
-            self.itemListModel = itemListModel
+        init(productsListModel: ProductsListModel) {
+            self.productsListModel = productsListModel
         }
 
-        // MARK: - Instance methods
+        // MARK: - Public methods
 
         func sendEvent(_ event: CreateListEvent) {
             switch event {
@@ -48,7 +48,7 @@ extension CreateListView {
             let findTargetString = string.trimmingCharacters(in: .whitespaces)
 
             // все найденные айтемы
-            let allFoundedItems = itemListModel.items.filter {
+            let allFoundedItems = productsListModel.allProducts.filter {
                 $0.name.lowercased().contains(findTargetString.lowercased())
             }
             // доступные категории
@@ -56,10 +56,10 @@ extension CreateListView {
 
             // кновертированная модель
             sortedCategories = categ.map { categoryID in
-                Category(
+                ProductCategoryModel(
                     id: categoryID,
                     name: "",
-                    items: allFoundedItems.filter { $0.category == categoryID }
+                    products: allFoundedItems.filter { $0.category == categoryID }
                 )
             }
         }

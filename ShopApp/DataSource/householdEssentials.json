@@ -2,7 +2,7 @@
     "data": {
         "id": 10,
         "name": "Домашнее хозяйство",
-        "items": [
+        "products": [
             {"id": 1, "category": 10, "color": "orange", "name": "Антистатик"},
             {"id": 2, "category": 10, "color": "orange", "name": "Аэрозоль от комаров"},
             {"id": 3, "category": 10, "color": "orange", "name": "Аккумулятор"},

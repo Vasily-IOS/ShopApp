@@ -2,7 +2,7 @@
     "data": {
         "id": 7,
         "name": "Ингредиенты и специи",
-        "items": [
+        "products": [
             {"id": 1, "category": 7, "color": "green", "name": "Агар"},
             {"id": 2, "category": 7, "color": "green", "name": "Аджика"},
             {"id": 3, "category": 7, "color": "green", "name": "Ажгон"},

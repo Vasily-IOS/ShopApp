@@ -2,7 +2,7 @@
     "data": {
         "id": 13,
         "name": "Рабочие инструменты",
-        "items": [
+        "products": [
             {"id": 1, "category": 13, "color": "green", "name": "Ароматизатор"},
             {"id": 2, "category": 13, "color": "green", "name": "Ароматизатор для авто"},
             {"id": 3, "category": 13, "color": "green", "name": "Аккумулятор"},

@@ -11,13 +11,13 @@ struct FoundedItemsScrollView: View {
 
     // MARK: - Properties
 
-    var items: [Item]
+    var products: [ProductModel]
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
-                ForEach(items) { item in
-                    ProductCellView(item: item)
+                ForEach(products) { product in
+                    ProductCellView(product: product)
                         .padding(.all, 1)
                 }
             }

@@ -2,7 +2,7 @@
     "data": {
         "id": 8,
         "name": "Закуски и сладости",
-        "items": [
+        "products": [
             {"id": 1, "category": 8, "color": "red", "name": "Абрикосовое варенье"},
             {"id": 2, "category": 8, "color": "red", "name": "Абрикосовый джем"},
             {"id": 3, "category": 8, "color": "red", "name": "Абрикосовый конфитюр"},

@@ -11,10 +11,10 @@ struct ProductCellView: View {
 
     // MARK: - Properties
 
-    var item: Item
+    var product: ProductModel
 
     var body: some View {
-        Text(item.name)
+        Text(product.name)
             .padding(.vertical, 3)
             .padding(.horizontal, 7)
             .background(makeCellColor())
@@ -23,7 +23,7 @@ struct ProductCellView: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 15)
                     .stroke(.black, lineWidth: 0.5)
-                    .hidden(item.color != "white")
+                    .hidden(product.color != "white")
             )
 
     }
@@ -31,7 +31,7 @@ struct ProductCellView: View {
     // MARK: - Instance methods
 
     private func makeCellColor() -> Color {
-        switch item.color {
+        switch product.color {
         case "systemTeal":
             return .teal
         case "pink":
@@ -58,7 +58,7 @@ struct ProductCellView: View {
     }
 
     private func makeCellTextLabelColor() -> Color {
-        switch item.color {
+        switch product.color {
         case "white":
             return .black
         default:

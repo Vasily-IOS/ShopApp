@@ -2,7 +2,7 @@
     "data": {
         "id": 11,
         "name": "Здоровье и красота",
-        "items": [
+        "products": [
             {"id": 1, "category": 11, "color": "systemTeal", "name": "Антисептик"},
             {"id": 2, "category": 11, "color": "systemTeal", "name": "Аскорбиновая кислота"},
             {"id": 3, "category": 11, "color": "systemTeal", "name": "Аспиратор для носа"},

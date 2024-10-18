@@ -26,25 +26,51 @@ extension MainView {
             }
         }
 
+        var products: ProductsListModel {
+            productsProvider.productList
+        }
+
         private let folderProvider: FolderProvider
 
-        private let itemsProvider: ItemsProvider
+        private let productsProvider: ProductsProvider
 
         // MARK: - Initializers
 
-        init(folderProvider: FolderProvider, itemsProvider: ItemsProvider) {
+        init(folderProvider: FolderProvider, itemsProvider: ProductsProvider) {
             self.folderProvider = folderProvider
-            self.itemsProvider = itemsProvider
+            self.productsProvider = itemsProvider
 
-            baseFolders = folderProvider.getBaseFolders()
-            foldersForSave = folderProvider.getSavedFolders()
+            initializeFolders()
         }
 
         // MARK: - Instance methods
 
-        // повесить эвенты // sendEvent..
+        func sendEvent(_ event: MainViewEvent) {
+            switch event {
+            case let .addFolder(name, completion):
+                addFolder(name: name, completion: completion)
+            case .removeFolder(let folderID):
+                removeFolder(id: folderID)
+            }
+        }
 
-        func addFolder(name: String, completion: (() -> ())) {
+        func isSelected(_ id: Int) -> Bool {
+            id == selectedFolderID
+        }
+
+        func getItems() -> ProductsListModel {
+            productsProvider.productList
+        }
+
+        // MARK: - Private methods
+
+        private func initializeFolders() {
+            let folders = folderProvider.fetchFolders()
+            baseFolders = folders.0
+            foldersForSave = folders.1
+        }
+
+        private func addFolder(name: String, completion: (() -> ())) {
             guard !(baseFolders + foldersForSave).contains(where: { $0.name == name }) else {
                 completion()
                 return
@@ -55,19 +81,11 @@ extension MainView {
             foldersForSave.append(folder)
         }
 
-        func removeFolder(id: Int) {
+        private func removeFolder(id: Int) {
             if let folderIndex = foldersForSave.firstIndex(where: { $0.id == id }) {
                 foldersForSave.remove(at: folderIndex)
                 selectedFolderID = 0
             }
-        }
-
-        func isSelected(_ id: Int) -> Bool {
-            id == selectedFolderID
-        }
-
-        func getItems() -> ItemListModel {
-            itemsProvider.itemList
         }
     }
 }

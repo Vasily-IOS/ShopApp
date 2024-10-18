@@ -11,7 +11,7 @@ enum ViewFactory {
     case launchScreen
     case ondoarding
     case main
-    case createList(ItemListModel)
+    case createList(ProductsListModel)
     case settings
 
     @MainActor
@@ -25,11 +25,11 @@ enum ViewFactory {
             OnboardingView(viewModel: viewModel)
         case .main:
             let folderProvider: FolderProvider = FolderProviderImpl()
-            let itemsProvider: ItemsProvider = ItemsProviderImpl()
+            let itemsProvider: ProductsProvider = ItemsProviderImpl()
             let viewModel = MainView.ViewModel(folderProvider: folderProvider, itemsProvider: itemsProvider)
             MainView(viewModel: viewModel)
-        case .createList(let itemListModel):
-            let viewModel = CreateListView.ViewModel(itemListModel: itemListModel)
+        case .createList(let productsListModel):
+            let viewModel = CreateListView.ViewModel(productsListModel: productsListModel)
             CreateListView(viewModel: viewModel)
         case .settings:
             SettingsView()

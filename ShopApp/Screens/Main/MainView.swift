@@ -46,7 +46,7 @@ struct MainView: View {
                                     .padding(.horizontal, 3)
                                     .contextMenu {
                                         Button {
-                                            viewModel.removeFolder(id: folder.id)
+                                            viewModel.sendEvent(.removeFolder(folder.id))
                                         } label: {
                                             Text(AssetString.removeFolderWithLists.rawValue)
                                         }
@@ -67,12 +67,12 @@ struct MainView: View {
                     .frame(width: 25, height: 25)
                     .onTapGesture {
                         router.present(.addItem(AssetString.newFolder.rawValue, AssetString.nameOfFolder.rawValue) { name in
-                            viewModel.addFolder(name: name) {
+                            viewModel.sendEvent(.addFolder(name) {
                                 router.dismissSheet()
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                     viewModel.isAlertPresented.toggle()
                                 }
-                            }
+                            })
                         })
                     }
                     .alert(isPresented: $viewModel.isAlertPresented) {
@@ -93,7 +93,7 @@ struct MainView: View {
             Spacer()
 
             Button {
-                router.push(.createList(viewModel.getItems()))
+                router.push(.createList(viewModel.products))
             } label: {
                 HStack {
                     Spacer()

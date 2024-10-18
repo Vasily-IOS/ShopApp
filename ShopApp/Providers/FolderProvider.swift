@@ -8,8 +8,7 @@
 import Foundation
 
 protocol FolderProvider {
-    func getBaseFolders() -> [FolderModel]
-    func getSavedFolders() -> [FolderModel]
+    func fetchFolders() -> ([FolderModel], [FolderModel])
     func updateFolderStorage(_ modelForSave: [FolderModel])
 }
 
@@ -32,12 +31,8 @@ final class FolderProviderImpl: FolderProvider {
 
     // MARK: - Instance methods
 
-    func getBaseFolders() -> [FolderModel] {
-        baseFolders
-    }
-
-    func getSavedFolders() -> [FolderModel] {
-        loadSavedFolders()
+    func fetchFolders() -> ([FolderModel], [FolderModel]) {
+        (baseFolders, foldersForSave)
     }
 
     func updateFolderStorage(_ modelForSave: [FolderModel]) {
@@ -45,6 +40,8 @@ final class FolderProviderImpl: FolderProvider {
             UserDefaults.standard.set(data, forKey: StorageKey.savedFolders.rawValue)
         }
     }
+
+    // MARK: - Private methods
 
     private func loadSavedFolders() -> [FolderModel] {
         if let data = UserDefaults.standard.data(forKey: StorageKey.savedFolders.rawValue),

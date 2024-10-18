@@ -2,7 +2,7 @@
     "data": {
         "id": 5,
         "name": "Зерновые продукты",
-        "items": [
+        "products": [
             {"id": 1, "category": 5, "color": "brown", "name": "Амарантовая мука"},
             {"id": 2, "category": 5, "color": "brown", "name": "Амарантовая крупа"},
             {"id": 3, "category": 5, "color": "brown", "name": "Бантики макароны"},

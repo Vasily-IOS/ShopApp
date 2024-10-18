@@ -2,7 +2,7 @@
     "data": {
         "id": 12,
         "name": "Зоотовары",
-        "items": [
+        "products": [
             {"id": 1, "category": 12, "color": "pink", "name": "Адресник"},
             {"id": 2, "category": 12, "color": "pink", "name": "Антигельминтик"},
             {"id": 3, "category": 12, "color": "pink", "name": "Аквариум"},

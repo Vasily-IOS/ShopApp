@@ -12,8 +12,7 @@ struct SettingsView: View {
     // MARK: - Properties
 
     var body: some View {
-        VStack {
-        }
+        VStack {}
         .screenSettings(title: AssetString.settingsCorrect.rawValue)
     }
 }

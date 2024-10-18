@@ -2,7 +2,7 @@
     "data": {
         "id": 6,
         "name": "Заморозка и полуфабрикаты",
-        "items": [
+        "products": [
             {"id": 1, "category": 6, "color": "blueWithOpacity", "name": "Ананасы"},
             {"id": 2, "category": 6, "color": "blueWithOpacity", "name": "Блины"},
             {"id": 3, "category": 6, "color": "blueWithOpacity", "name": "Бисквит"},

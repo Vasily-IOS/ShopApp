@@ -23,15 +23,15 @@ enum ProductType: String {
     case householdEssentials = "householdEssentials" // домашнее хозяйство
 }
 
-protocol ItemsProvider {
-    var itemList: ItemListModel { get }
+protocol ProductsProvider {
+    var productList: ProductsListModel { get }
 }
 
-final class ItemsProviderImpl: ItemsProvider {
+final class ItemsProviderImpl: ProductsProvider {
 
     // MARK: - Properties
 
-    private (set) var itemList = ItemListModel()
+    private (set) var productList = ProductsListModel()
 
     private let productTypes: [ProductType] = [
         .vegetablesFruitsAndBerries,
@@ -60,14 +60,14 @@ final class ItemsProviderImpl: ItemsProvider {
     private func generateItemsList() {
         Task {
             let itemsCategories = await generateItemsCategories()
-            let allItems = Array(itemsCategories.map({ $0.items }).joined())
-            itemList = ItemListModel(items: allItems, itemsCategory: itemsCategories)
+            let allItems = Array(itemsCategories.map({ $0.products }).joined())
+            productList = ProductsListModel(allProducts: allItems, productsCategory: itemsCategories)
         }
     }
 
-    private func generateItemsCategories() async -> [Category] {
-        var result = [Category]()
-        await withTaskGroup(of: Category.self) { group in
+    private func generateItemsCategories() async -> [ProductCategoryModel] {
+        var result = [ProductCategoryModel]()
+        await withTaskGroup(of: ProductCategoryModel.self) { group in
             for type in productTypes {
                 group.addTask {
                     await self.decodeItem(by: type)!
@@ -81,11 +81,11 @@ final class ItemsProviderImpl: ItemsProvider {
         return result
     }
 
-    private func decodeItem(by type: ProductType) async -> Category? {
+    private func decodeItem(by type: ProductType) async -> ProductCategoryModel? {
         do {
             if let url = Bundle.main.url(forResource: type.rawValue, withExtension: "json") {
                 let data = try Data(contentsOf: url)
-                let products = try JSONDecoder().decode(Json.self, from: data)
+                let products = try JSONDecoder().decode(ProductJsonModel.self, from: data)
                 return products.data
             } else {
                 return nil

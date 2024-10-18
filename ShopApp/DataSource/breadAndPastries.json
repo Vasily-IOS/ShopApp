@@ -2,7 +2,7 @@
     "data": {
         "id": 2,
         "name": "Хлеб и выпечка",
-        "items": [
+        "products": [
             {"id": 1, "category": 2, "color": "gray", "name": "Багель"},
             {"id": 2, "category": 2, "color": "gray", "name": "Багет"},
             {"id": 3, "category": 2, "color": "gray", "name": "Батон"},

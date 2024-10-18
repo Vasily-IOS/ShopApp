@@ -2,7 +2,7 @@
     "data": {
         "id": 4,
         "name": "Мясо и рыба",
-        "items": [
+        "products": [
             {"id": 1, "category": 4, "color": "cyan", "name": "Анчоусы"},
             {"id": 2, "category": 4, "color": "cyan", "name": "Ассорти из морепродуктов"},
             {"id": 3, "category": 4, "color": "cyan", "name": "Баранина"},

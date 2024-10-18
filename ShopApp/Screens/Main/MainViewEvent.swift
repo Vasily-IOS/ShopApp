@@ -8,6 +8,6 @@
 import Foundation
 
 enum MainViewEvent {
-    case addFolder(String)
+    case addFolder(String, (() -> ()))
     case removeFolder(Int)
 }

@@ -2,7 +2,7 @@
     "data": {
         "id": 9,
         "name": "Напитки",
-        "items": [
+        "products": [
             {"id": 1, "category": 9, "color": "blue", "name": "Абсент"},
             {"id": 2, "category": 9, "color": "blue", "name": "Адвокаат"},
             {"id": 3, "category": 9, "color": "blue", "name": "Амаретто"},

@@ -2,7 +2,7 @@
     "data": {
         "id": 3,
         "name": "Молоко и сыр",
-        "items": [
+        "products": [
             {"id": 1, "category": 3, "color": "white", "name": "Ацидофилин"},
             {"id": 2, "category": 3, "color": "white", "name": "Айран"},
             {"id": 3, "category": 3, "color": "white", "name": "Взбитые сливки"},
