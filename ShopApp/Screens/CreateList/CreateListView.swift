@@ -10,11 +10,9 @@ import SwiftUI
 struct CreateListView: View {
     
     // MARK: - Properties
-    
-    var itemListModel: ItemListModel
-    
-    @ObservedObject private var viewModel = ViewModel()
-    
+
+    @State var viewModel: ViewModel
+
     @EnvironmentObject var router: AppRouter
     
     var body: some View {
@@ -44,23 +42,23 @@ struct CreateListView: View {
             }
         }
         .onChange(of: viewModel.inputText) { _, newValue in
-            let findTargetString = newValue.trimmingCharacters(in: .whitespaces)
-            
-            // все найденные айтемы
-            let allFoundedItems = itemListModel.items.filter {
-                $0.name.lowercased().contains(findTargetString.lowercased())
-            }
-            // доступные категории
-            let categ = Array(Set(allFoundedItems.map { $0.category })).sorted()
-            
-            // кновертированная модель
-            viewModel.sortedCategories = categ.map { categoryID in
-                Category(
-                    id: categoryID,
-                    name: "",
-                    items: allFoundedItems.filter { $0.category == categoryID }
-                )
-            }
+//            let findTargetString = newValue.trimmingCharacters(in: .whitespaces)
+//            
+//            // все найденные айтемы
+//            let allFoundedItems = viewModel.itemListModel.items.filter {
+//                $0.name.lowercased().contains(findTargetString.lowercased())
+//            }
+//            // доступные категории
+//            let categ = Array(Set(allFoundedItems.map { $0.category })).sorted()
+//            
+//            // кновертированная модель
+//            viewModel.sortedCategories = categ.map { categoryID in
+//                Category(
+//                    id: categoryID,
+//                    name: "",
+//                    items: allFoundedItems.filter { $0.category == categoryID }
+//                )
+//            }
         }
         .screenSettings(isSettingsButtonHidden: false) {
             router.push(.settings)

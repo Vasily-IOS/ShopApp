@@ -7,15 +7,12 @@
 
 import Foundation
 
-typealias FolderName = String
-typealias FolderID = Int
-
 extension MainView.ViewModel {
 
     // MARK: - Nested types
 
     enum Event {
-        case addFolder(FolderName)
-        case removeFolder(FolderID)
+        case addFolder(String)
+        case removeFolder(Int)
     }
 }

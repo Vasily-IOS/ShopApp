@@ -19,7 +19,7 @@ struct ShopApp: App {
             if isShowContentView {
                 ContentView()
             } else {
-                LaunchScreenView()
+                ViewFactory.launchScreen.view
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                             isShowContentView.toggle()

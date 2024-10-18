@@ -9,13 +9,22 @@ import Foundation
 
 extension CreateListView {
     @MainActor
-    final class ViewModel: ObservableObject {
+    @Observable
+    final class ViewModel {
 
         // MARK: - Properties
 
-        @Published var sortedCategories: [Category] = []
+        var sortedCategories: [Category] = []
 
-        @Published var inputText: String = ""
+        var inputText: String = ""
+
+        let itemListModel: ItemListModel
+
+        // MARK: - Initializers
+
+        init(itemListModel: ItemListModel) {
+            self.itemListModel = itemListModel
+        }
 
         // MARK: - Instance methods
 

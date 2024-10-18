@@ -8,14 +8,15 @@
 import Foundation
 
 extension OnboardingView {
+    @Observable
     @MainActor
-    final class ViewModel: ObservableObject {
+    final class ViewModel {
 
         // MARK: - Properties
 
-        private (set) var pages = OnboardingModel.model
+        var pageIndex = 0
 
-        @Published var pageIndex = 0
+        private (set) var pages = OnboardingModel.model
 
         // MARK: - Instance methods
 

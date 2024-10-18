@@ -16,8 +16,8 @@ struct FoundedItemsScrollView: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
-                ForEach(items, id: \.self) { item in
-                    CustomCellView(item: item)
+                ForEach(items) { item in
+                    ProductCellView(item: item)
                 }
             }
         }

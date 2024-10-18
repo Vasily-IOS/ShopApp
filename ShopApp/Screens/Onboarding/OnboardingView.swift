@@ -7,13 +7,14 @@
 
 import SwiftUI
 
+@MainActor
 struct OnboardingView: View {
 
     // MARK: - Properties
 
-    @AppStorage(StorageKey.isOnboardingShowed.rawValue) var isOnboardingShowed = false
+    @State var viewModel: ViewModel
 
-    @StateObject private var viewModel = ViewModel()
+    @AppStorage(StorageKey.isOnboardingShowed.rawValue) var isOnboardingShowed = false
 
     var body: some View {
         VStack {
@@ -70,8 +71,4 @@ struct OnboardingView: View {
     private var skipButtonTitle: String {
         viewModel.isLastPage() ? " " : AssetString.skip.rawValue
     }
-}
-
-#Preview {
-    OnboardingView()
 }

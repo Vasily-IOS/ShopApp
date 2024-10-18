@@ -1,5 +1,5 @@
 //
-//  ProductChapterCell.swift
+//  ProductChapterCellView.swift
 //  ShopApp
 //
 //  Created by Василий on 10.10.2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ProductChapterCell: View {
+struct ProductChapterCellView: View {
 
     // MARK: - Properties
 
@@ -26,5 +26,5 @@ struct ProductChapterCell: View {
 }
 
 #Preview {
-    ProductChapterCell(categoryName: "jjdjjd")
+    ProductChapterCellView(categoryName: "jjdjjd")
 }

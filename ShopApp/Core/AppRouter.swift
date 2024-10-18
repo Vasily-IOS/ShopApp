@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 final class AppRouter: ObservableObject {
 
     // MARK: - Instance methods
@@ -61,11 +62,11 @@ final class AppRouter: ObservableObject {
     func build(_ page: Page) -> some View {
         switch page {
         case .main:
-            MainView()
+            ViewFactory.main.view
         case .createList(let itemListModel):
-            CreateListView(itemListModel: itemListModel)
+            ViewFactory.createList(itemListModel).view
         case .settings:
-            SettingsView()
+            ViewFactory.settings.view
         }
     }
 

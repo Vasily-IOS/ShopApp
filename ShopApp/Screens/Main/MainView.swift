@@ -11,7 +11,7 @@ struct MainView: View {
 
     // MARK: - Properties
 
-    @StateObject private var viewModel = ViewModel()
+    @State var viewModel: ViewModel
 
     @EnvironmentObject var router: AppRouter
 
@@ -110,8 +110,4 @@ struct MainView: View {
         .padding(.vertical, 25)
         .padding(.horizontal, 16)
     }
-}
-
-#Preview {
-    MainView()
 }

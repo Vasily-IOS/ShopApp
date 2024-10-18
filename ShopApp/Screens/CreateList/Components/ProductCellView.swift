@@ -1,5 +1,5 @@
 //
-//  CustomCellView.swift
+//  ProductCellView.swift
 //  ShopApp
 //
 //  Created by Василий on 10.10.2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CustomCellView: View {
+struct ProductCellView: View {
 
     // MARK: - Properties
 

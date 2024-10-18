@@ -9,29 +9,33 @@ import Foundation
 
 extension MainView {
     @MainActor
-    final class ViewModel: ObservableObject {
+    @Observable
+    final class ViewModel {
 
         // MARK: - Properties
 
-        @Published var selectedFolderID = 0
+         var selectedFolderID = 0
 
-        @Published var isAlertPresented = false
+         var isAlertPresented = false
 
-        @Published var baseFolders: [FolderModel] = []
+         var baseFolders: [FolderModel] = []
 
-        @Published var foldersForSave: [FolderModel] = [] {
+         var foldersForSave: [FolderModel] = [] {
             didSet {
                 folderProvider.updateFolderStorage(foldersForSave)
             }
         }
 
-        private let folderProvider: FolderProvider = FolderProviderImpl()
+        private let folderProvider: FolderProvider
 
-        private let itemsProvider: ItemsProvider = ItemsProviderImpl()
+        private let itemsProvider: ItemsProvider
 
         // MARK: - Initializers
 
-        init() {
+        init(folderProvider: FolderProvider, itemsProvider: ItemsProvider) {
+            self.folderProvider = folderProvider
+            self.itemsProvider = itemsProvider
+
             baseFolders = folderProvider.getBaseFolders()
             foldersForSave = folderProvider.getSavedFolders()
         }

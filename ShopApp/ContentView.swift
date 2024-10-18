@@ -29,7 +29,7 @@ struct ContentView: View {
             }
             .environmentObject(router)
         } else {
-            OnboardingView()
+            ViewFactory.ondoarding.view
         }
     }
 }
