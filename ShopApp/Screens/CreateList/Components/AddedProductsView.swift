@@ -56,62 +56,59 @@ enum Category: String {
     }
 }
 
+struct Cat: Identifiable {
+    let id = UUID().uuidString
+    let cat: Int
+    let name: String
+    let products: [ProductModel]
+
+    init(cat: Int, products: [ProductModel]) {
+        self.cat = cat
+        self.name = Category(rawValue: cat)?.rawValue ?? ""
+        self.products = products
+    }
+}
+
 struct AddedProductsView: View {
 
     // MARK: - Properties
 
-    @Binding var products: [ProductModel]
+    @Binding var products: [(Int, [ProductModel])]
 
     var body: some View {
         VStack(spacing: 3) {
-            ForEach(0..<Array(Set(products.map { $0.category })).count, id: \.self) { cat in
-                Section(Category.init(rawValue: cat)?.rawValue ?? "Нет ззачения") {
-                    List(products.filter { $0.category == cat }) { element in
-                        ProductCellView(product: element)
-                    }
-                }
+            ForEach(products.map { Cat(cat: $0.0, products: $0.1) }) { cat in
+                ProductChapter(cat: cat)
             }
-//            ForEach(products) { product in
-//                if products.count == 1 {
-//                    ProductCellView(product: product)
-//                        .cornerRadius(15, corners: .allCorners)
-//                } else {
-//                    if product.id == products.first?.id {
-//                        ProductCellView(product: product)
-//                            .cornerRadius(15, corners: [.topLeft, .topRight])
-//                    } else if product.id == products.last?.id {
-//                        ProductCellView(product: product)
-//                            .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
-//                    } else {
-//                        ProductCellView(product: product)
-//                    }
-//                }
-//            }
         }
     }
 }
 
-#Preview {
-    AddedProductsView(products: .constant([
-        .init(id: 0, category: 0, color: "red", name: "Земляника"),
-        .init(id: 5, category: 0, color: "red", name: "Малина"),
-        .init(id: 1, category: 1, color: "blue", name: "Черный хлеб"),
-        .init(id: 2, category: 2, color: "orange", name: "Сливки"),
-        .init(id: 3, category: 3, color: "yellow", name: "Карась")
-    ]))
-}
+struct ProductChapter: View {
 
-//            ForEach(0..<Array(Set(products.map { $0.category })).count, id: \.self) { categoryID in
-//                LabeledContent(Category.init(rawValue: categoryID)?.rawValue ?? "", value: "")
-//                    .font(.system(size: 16))
-//                    .foregroundStyle(.gray)
-//                VStack(spacing: 3) {
-//                    ForEach(self.products.filter { $0.category == categoryID }) { pr in
-//                        LabeledContent(pr.name, value: "")
-//                            .font(.system(size: 20))
-//                            .padding(.leading, 16)
-//                            .frame(height: 44)
-//                            .background(.orange)
-//                    }
-//                }
-//            }
+    // MARK: - Properties
+
+    let cat: Cat
+
+    var body: some View {
+        LabeledContent(cat.name, value: "")
+            .foregroundStyle(.gray)
+            .font(.system(size: 16))
+        ForEach(cat.products) { product in
+            if cat.products.count == 1 {
+                ProductCellView(product: product)
+                    .cornerRadius(15, corners: .allCorners)
+            } else {
+                if product.id == cat.products.first?.id {
+                    ProductCellView(product: product)
+                        .cornerRadius(15, corners: [.topLeft, .topRight])
+                } else if product.id == cat.products.last?.id {
+                    ProductCellView(product: product)
+                        .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
+                } else {
+                    ProductCellView(product: product)
+                }
+            }
+        }
+    }
+}

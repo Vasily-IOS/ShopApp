@@ -49,7 +49,7 @@ struct CreateListView: View {
                 }
 
                 // не пашет
-//                AddedProductsView(products: $viewModel.addedProducts)
+                AddedProductsView(products: $viewModel.convertedAddedProducts)
 
                 if !viewModel.addedProducts.isEmpty {
                     Color.black
