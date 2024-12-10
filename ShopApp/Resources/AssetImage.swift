@@ -17,6 +17,8 @@ enum AssetImage {
     case settings
     case search
     case cross
+    case rightArrow
+    case cardMenu
 
     var image: Image {
         switch self {
@@ -38,6 +40,10 @@ enum AssetImage {
             return Image("search_icon")
         case .cross:
             return Image("cross_icon")
+        case .rightArrow:
+            return Image("rightArrow_icon")
+        case .cardMenu:
+            return Image("cardMenu_icon")
         }
     }
 }

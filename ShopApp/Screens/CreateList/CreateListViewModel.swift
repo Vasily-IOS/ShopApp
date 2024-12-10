@@ -8,13 +8,14 @@
 import Foundation
 
 extension CreateListView {
-    @MainActor
     @Observable
     final class ViewModel {
 
         // MARK: - Properties
 
-        var sortedCategories: [ProductCategoryModel] = []
+        var sortedProducts: [ProductModel] = []
+
+        var addedProducts: [ProductModel] = []
 
         var inputText: String = ""
 
@@ -34,33 +35,37 @@ extension CreateListView {
                 clearInput()
             case .sort(let text):
                 sortProducts(by: text)
+            case .addProduct(let product):
+                addProduct(product: product)
             }
+        }
+
+        func isFirstCategory(id: Int) -> Bool {
+            id == productsListModel.productsCategory.first?.id ?? 0
+        }
+
+        func isLastCategory(id: Int) -> Bool {
+            id == productsListModel.productsCategory.last?.id ?? 0
         }
 
         // MARK: - Private methods
 
         private func clearInput() {
             inputText.removeAll()
-            sortedCategories.removeAll()
+            sortedProducts.removeAll()
         }
 
         private func sortProducts(by string: String) {
             let findTargetString = string.trimmingCharacters(in: .whitespaces)
-
-            // все найденные айтемы
-            let allFoundedItems = productsListModel.allProducts.filter {
+            sortedProducts = productsListModel.allProducts.filter {
                 $0.name.lowercased().contains(findTargetString.lowercased())
             }
-            // доступные категории
-            let categ = Array(Set(allFoundedItems.map { $0.category })).sorted()
+        }
 
-            // кновертированная модель
-            sortedCategories = categ.map { categoryID in
-                ProductCategoryModel(
-                    id: categoryID,
-                    name: "",
-                    products: allFoundedItems.filter { $0.category == categoryID }
-                )
+        private func addProduct(product: ProductModel) {
+            if !addedProducts.contains(where: { $0.name == product.name}) {
+                addedProducts.append(product)
+                print("Added product \(product.name)")
             }
         }
     }

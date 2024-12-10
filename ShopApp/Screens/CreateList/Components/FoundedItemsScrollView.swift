@@ -13,12 +13,17 @@ struct FoundedItemsScrollView: View {
 
     var products: [ProductModel]
 
+    var onProductSelected: ((ProductModel) -> ())
+
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
                 ForEach(products) { product in
-                    ProductCellView(product: product)
+                    ProductPromptCellView(product: product)
                         .padding(.all, 1)
+                        .onTapGesture {
+                            onProductSelected(product)
+                        }
                 }
             }
         }

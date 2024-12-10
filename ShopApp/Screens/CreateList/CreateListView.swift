@@ -35,11 +35,40 @@ struct CreateListView: View {
                         .stroke(.black.opacity(0.5))
                 )
 
-                VStack {
-                    ForEach(viewModel.sortedCategories) { category in
-                        FoundedItemsScrollView(products: category.products)
+                HStack {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(viewModel.sortedProducts, id: \.self) { product in
+                                ProductPromptCellView(product: product)
+                                    .onTapGesture {
+                                        viewModel.sendEvent(.addProduct(product))
+                                    }
+                            }
+                        }
                     }
-                    Spacer()
+                }
+
+                // не пашет
+//                AddedProductsView(products: $viewModel.addedProducts)
+
+                if !viewModel.addedProducts.isEmpty {
+                    Color.black
+                        .frame(height: 1)
+                        .padding(.vertical, 17)
+                }
+
+                VStack(spacing: 3) {
+                    ForEach(viewModel.productsListModel.productsCategory) { category in
+                        if viewModel.isFirstCategory(id: category.id) {
+                            CategoryCellView(categoryName: category.name)
+                                .cornerRadius(15, corners: .init([.topLeft, .topRight]))
+                        } else if viewModel.isLastCategory(id: category.id) {
+                            CategoryCellView(categoryName: category.name)
+                                .cornerRadius(15, corners: .init([.bottomLeft, .bottomRight]))
+                        } else {
+                            CategoryCellView(categoryName: category.name)
+                        }
+                    }
                 }
             }
             .onChange(of: viewModel.inputText) { _, newValue in

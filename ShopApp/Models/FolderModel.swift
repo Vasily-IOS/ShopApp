@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import PersistedPropertyWrapper
 
-struct FolderModel: Codable, Identifiable, Equatable {
+struct FolderModel: Codable, Identifiable, Equatable, UserDefaultsPrimitive {
     let id: Int
     let name: String
 }
