@@ -16,6 +16,7 @@ final class AppRouter: ObservableObject {
         case main
         case createList(ProductsListModel)
         case settings
+        case productCategoryList(ProductCategoryModel)
 
         var id: String {
             UUID().uuidString
@@ -67,6 +68,8 @@ final class AppRouter: ObservableObject {
             ViewFactory.createList(itemListModel).view
         case .settings:
             ViewFactory.settings.view
+        case .productCategoryList(let productCategory):
+            ViewFactory.productCategoryList(productCategory).view
         }
     }
 
