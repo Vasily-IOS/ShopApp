@@ -34,6 +34,7 @@ struct CreateListView: View {
                     RoundedRectangle(cornerRadius: 15)
                         .stroke(.black.opacity(0.5))
                 )
+                .padding(.top, 0)
 
                 if !viewModel.sortedProducts.isEmpty {
                     HStack {
@@ -64,11 +65,20 @@ struct CreateListView: View {
                         if viewModel.isFirstCategory(id: category.id) {
                             CategoryCellView(categoryName: category.name)
                                 .cornerRadius(15, corners: .init([.topLeft, .topRight]))
+                                .onTapGesture {
+                                    router.push(.productCategoryList(category))
+                                }
                         } else if viewModel.isLastCategory(id: category.id) {
                             CategoryCellView(categoryName: category.name)
                                 .cornerRadius(15, corners: .init([.bottomLeft, .bottomRight]))
+                                .onTapGesture {
+                                    router.push(.productCategoryList(category))
+                                }
                         } else {
                             CategoryCellView(categoryName: category.name)
+                                .onTapGesture {
+                                    router.push(.productCategoryList(category))
+                                }
                         }
                     }
                 }

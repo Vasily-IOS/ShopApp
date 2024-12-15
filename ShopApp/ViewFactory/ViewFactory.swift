@@ -13,6 +13,7 @@ enum ViewFactory {
     case main
     case createList(ProductsListModel)
     case settings
+    case productCategoryList(ProductCategoryModel)
 
     @MainActor
     @ViewBuilder
@@ -33,6 +34,9 @@ enum ViewFactory {
             CreateListView(viewModel: viewModel)
         case .settings:
             SettingsView()
+        case .productCategoryList(let productsCategory):
+            let viewModel = ProductsCategoryListView.ViewModel(productsCategory: productsCategory)
+            ProductsCategoryListView(viewModel: viewModel)
         }
     }
 }
