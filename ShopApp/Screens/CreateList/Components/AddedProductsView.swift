@@ -76,38 +76,9 @@ struct AddedProductsView: View {
     @Binding var products: [(Int, [ProductModel])]
 
     var body: some View {
-        VStack(spacing: 3) {
+        VStack(spacing: 10) {
             ForEach(products.map { Cat(cat: $0.0, products: $0.1) }) { cat in
-                ProductChapter(cat: cat)
-            }
-        }
-    }
-}
-
-struct ProductChapter: View {
-
-    // MARK: - Properties
-
-    let cat: Cat
-
-    var body: some View {
-        LabeledContent(cat.name, value: "")
-            .foregroundStyle(.gray)
-            .font(.system(size: 16))
-        ForEach(cat.products) { product in
-            if cat.products.count == 1 {
-                ProductCellView(product: product)
-                    .cornerRadius(15, corners: .allCorners)
-            } else {
-                if product.id == cat.products.first?.id {
-                    ProductCellView(product: product)
-                        .cornerRadius(15, corners: [.topLeft, .topRight])
-                } else if product.id == cat.products.last?.id {
-                    ProductCellView(product: product)
-                        .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
-                } else {
-                    ProductCellView(product: product)
-                }
+                ProductsChapterView(cat: cat)
             }
         }
     }

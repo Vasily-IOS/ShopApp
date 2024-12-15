@@ -19,6 +19,8 @@ enum AssetImage {
     case cross
     case rightArrow
     case cardMenu
+    case productSelect
+    case productSelected
 
     var image: Image {
         switch self {
@@ -44,6 +46,10 @@ enum AssetImage {
             return Image("rightArrow_icon")
         case .cardMenu:
             return Image("cardMenu_icon")
+        case .productSelect:
+            return Image("productSelect_icon")
+        case .productSelected:
+            return Image("productSelected_icon")
         }
     }
 }

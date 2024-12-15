@@ -17,7 +17,7 @@ struct CreateListView: View {
 
     var body: some View {
         ScrollView(showsIndicators: false) {
-            VStack {
+            VStack(spacing: 10) {
                 HStack {
                     AssetImage.search.image
                         .padding(.leading, 7)
@@ -35,20 +35,22 @@ struct CreateListView: View {
                         .stroke(.black.opacity(0.5))
                 )
 
-                HStack {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack {
-                            ForEach(viewModel.sortedProducts, id: \.self) { product in
-                                ProductPromptCellView(product: product)
-                                    .onTapGesture {
-                                        viewModel.sendEvent(.addProduct(product))
-                                    }
+                if !viewModel.sortedProducts.isEmpty {
+                    HStack {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(viewModel.sortedProducts, id: \.self) { product in
+                                    ProductPromptCellView(product: product)
+                                        .onTapGesture {
+                                            viewModel.sendEvent(.addProduct(product))
+                                        }
+                                }
                             }
                         }
                     }
+                    .padding(.vertical, 6)
                 }
 
-                // не пашет
                 AddedProductsView(products: $viewModel.convertedAddedProducts)
 
                 if !viewModel.addedProducts.isEmpty {

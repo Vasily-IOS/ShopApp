@@ -14,7 +14,11 @@ struct ProductCellView: View {
     let product: ProductModel
 
     var body: some View {
-        LabeledContent(product.name) {
+        HStack {
+            AssetImage.productSelect.image
+            Text(product.name)
+                .padding(.trailing, 16)
+            Spacer()
             AssetImage.cardMenu.image
                 .padding(.trailing, 16)
         }
