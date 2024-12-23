@@ -11,7 +11,7 @@ struct ProductPromptCellView: View {
 
     // MARK: - Properties
 
-    var product: ProductModel
+    var product: ProductUIModel
 
     var body: some View {
         Text(product.name)

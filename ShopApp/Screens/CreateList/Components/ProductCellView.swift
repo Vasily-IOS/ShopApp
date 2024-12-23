@@ -6,29 +6,34 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ProductCellView: View {
 
     // MARK: - Properties
 
-    let product: ProductModel
+    let product: ProductUIModel
+
+    var addedProductEvent: PassthroughSubject<AddedProductEvent, Never>
 
     var body: some View {
         HStack {
             AssetImage.productSelect.image
+                .onTapGesture {
+                    addedProductEvent.send(.selected)
+                }
             Text(product.name)
                 .padding(.trailing, 16)
+                .font(.system(size: 20))
             Spacer()
             AssetImage.cardMenu.image
                 .padding(.trailing, 16)
+                .onTapGesture {
+                    addedProductEvent.send(.navigateToSettings)
+                }
         }
-        .font(.system(size: 20))
         .padding(.leading, 16)
         .frame(height: 44)
         .background(.orange)
     }
-}
-
-#Preview {
-    ProductCellView(product: ProductModel(id: 0, category: 1, color: "red", name: "Cheese"))
 }

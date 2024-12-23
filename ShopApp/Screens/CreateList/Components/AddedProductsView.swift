@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 enum Category: String {
     case fruits = "Овощи, фрукты и ягоды"
@@ -60,9 +61,9 @@ struct Cat: Identifiable {
     let id = UUID().uuidString
     let cat: Int
     let name: String
-    let products: [ProductModel]
+    let products: [ProductUIModel]
 
-    init(cat: Int, products: [ProductModel]) {
+    init(cat: Int, products: [ProductUIModel]) {
         self.cat = cat
         self.name = Category(rawValue: cat)?.rawValue ?? ""
         self.products = products
@@ -73,12 +74,14 @@ struct AddedProductsView: View {
 
     // MARK: - Properties
 
-    @Binding var products: [(Int, [ProductModel])]
+    @Binding var products: [(Int, [ProductUIModel])]
+
+    var addedProductEvent: PassthroughSubject<AddedProductEvent, Never>
 
     var body: some View {
         VStack(spacing: 10) {
             ForEach(products.map { Cat(cat: $0.0, products: $0.1) }) { cat in
-                ProductsChapterView(cat: cat)
+                ProductsChapterView(cat: cat, addedProductEvent: addedProductEvent)
             }
         }
     }

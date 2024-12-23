@@ -49,9 +49,7 @@ struct ProductsCategoryListView: View {
                         } else if viewModel.isOneOnly() {
                             ProductCategoryCell(product: product)
                                 .cornerRadius(15, corners: .allCorners)
-                        }
-//                        }
-                        else {
+                        } else {
                             ProductCategoryCell(product: product)
                         }
                     }

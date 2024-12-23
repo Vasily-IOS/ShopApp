@@ -23,15 +23,15 @@ enum ProductType: String {
     case householdEssentials = "householdEssentials" // домашнее хозяйство
 }
 
-protocol ProductsProvider {
-    var productList: ProductsListModel { get }
+protocol ProductsListUIProvider {
+    var productList: ProductsListUIModel { get }
 }
 
-final class ItemsProviderImpl: ProductsProvider {
+final class ProductsListUIProviderImpl: ProductsListUIProvider {
 
     // MARK: - Properties
 
-    private (set) var productList = ProductsListModel()
+    private (set) var productList = ProductsListUIModel()
 
     private let productTypes: [ProductType] = [
         .vegetablesFruitsAndBerries,
@@ -52,25 +52,25 @@ final class ItemsProviderImpl: ProductsProvider {
     // MARK: - Initializers
 
     init() {
-       generateItemsList()
+        generateProductList()
     }
 
     // MARK: - Instance methods
 
-    private func generateItemsList() {
+    private func generateProductList() {
         Task {
             let itemsCategories = await generateItemsCategories()
             let allItems = Array(itemsCategories.map({ $0.products }).joined())
-            productList = ProductsListModel(allProducts: allItems, productsCategory: itemsCategories)
+            productList = ProductsListUIModel(allProducts: allItems, productsCategory: itemsCategories)
         }
     }
 
-    private func generateItemsCategories() async -> [ProductCategoryModel] {
-        var result = [ProductCategoryModel]()
-        await withTaskGroup(of: ProductCategoryModel.self) { group in
+    private func generateItemsCategories() async -> [ProductCategoryUIModel] {
+        var result: [ProductCategoryUIModel] = []
+        await withTaskGroup(of: ProductCategoryUIModel.self) { group in
             for type in productTypes {
                 group.addTask {
-                    await self.decodeItem(by: type)!
+                    await self.decodeCategoryItem(by: type)!
                 }
             }
 
@@ -81,12 +81,21 @@ final class ItemsProviderImpl: ProductsProvider {
         return result
     }
 
-    private func decodeItem(by type: ProductType) async -> ProductCategoryModel? {
+    private func decodeCategoryItem(by type: ProductType) async -> ProductCategoryUIModel? {
         do {
             if let url = Bundle.main.url(forResource: type.rawValue, withExtension: "json") {
                 let data = try Data(contentsOf: url)
-                let products = try JSONDecoder().decode(ProductJsonModel.self, from: data)
-                return products.data
+                let productsJson = try JSONDecoder().decode(ProductJsonModel.self, from: data)
+
+                return ProductCategoryUIModel(
+                    id: productsJson.data.id,
+                    name: productsJson.data.name,
+                    products: productsJson.data.products.map { ProductUIModel(
+                        id: $0.id,
+                        category: $0.category,
+                        name: $0.name)
+                    }
+                )
             } else {
                 return nil
             }

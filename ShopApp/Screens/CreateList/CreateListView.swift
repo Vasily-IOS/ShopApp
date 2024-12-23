@@ -6,6 +6,12 @@
 //
 
 import SwiftUI
+import Combine
+
+enum AddedProductEvent {
+    case selected
+    case navigateToSettings
+}
 
 struct CreateListView: View {
 
@@ -52,7 +58,7 @@ struct CreateListView: View {
                     .padding(.vertical, 6)
                 }
 
-                AddedProductsView(products: $viewModel.convertedAddedProducts)
+                AddedProductsView(products: $viewModel.convertedAddedProducts, addedProductEvent: viewModel.addedProductEvent)
 
                 if !viewModel.addedProducts.isEmpty {
                     Color.black
@@ -88,6 +94,15 @@ struct CreateListView: View {
             }
             .screenSettings(isSettingsButtonHidden: false) {
                 router.push(.settings)
+            }
+            .onReceive(viewModel.addedProductEvent) { event in
+                switch event {
+                case .navigateToSettings:
+                    print("navigateToSettings")
+                    router.present(.productDetail)
+                case .selected:
+                    print("selected")
+                }
             }
         }
     }

@@ -15,13 +15,13 @@ extension ProductsCategoryListView {
 
         var searchText = ""
 
-        var sortedProductByCategory: [ProductModel] = []
+        var sortedProductByCategory: [ProductUIModel] = []
 
-        let productsCategory: ProductCategoryModel
+        let productsCategory: ProductCategoryUIModel
 
         // MARK: - Initializers
 
-        init(productsCategory: ProductCategoryModel) {
+        init(productsCategory: ProductCategoryUIModel) {
             self.productsCategory = productsCategory
             self.sortedProductByCategory = productsCategory.products
         }

@@ -8,16 +8,16 @@
 import Foundation
 
 struct ProductJsonModel: Codable, Equatable, Hashable {
-    let data: ProductCategoryModel
+    let data: ProductCategoryJsonModel
 }
 
-struct ProductCategoryModel: Codable, Identifiable, Equatable, Hashable {
+struct ProductCategoryJsonModel: Codable, Identifiable, Equatable, Hashable {
     let id: Int
     let name: String
-    let products: [ProductModel]
+    let products: [SingleProductJsonModel]
 }
 
-struct ProductModel: Codable, Identifiable, Equatable, Hashable {
+struct SingleProductJsonModel: Codable, Identifiable, Equatable, Hashable {
     let id: Int
     let category: Int
     let color: String

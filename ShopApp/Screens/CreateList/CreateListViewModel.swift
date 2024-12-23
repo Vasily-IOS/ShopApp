@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 extension CreateListView {
     @Observable
@@ -13,30 +14,29 @@ extension CreateListView {
 
         // MARK: - Properties
 
-        var sortedProducts: [ProductModel] = []
+        var sortedProducts: [ProductUIModel] = []
 
-        var convertedAddedProducts: [(Int, [ProductModel])] = []
+        var convertedAddedProducts: [(Int, [ProductUIModel])] = []
 
-        func testConvert(_ input: [ProductModel]) {
-            let convertedModel = Array(Dictionary(grouping: input) { $0.category }).sorted(by: { $0.key > $1.key })
-
-            let categ = convertedModel.map { $0.key }
-            convertedAddedProducts = convertedModel
+        func testConvert(_ input: [ProductUIModel]) {
+            convertedAddedProducts = Array(Dictionary(grouping: input) { $0.category }).sorted(by: { $0.key > $1.key })
         }
 
         var inputText: String = ""
 
-        let productsListModel: ProductsListModel
+        let productsListModel: ProductsListUIModel
 
-        @ObservationIgnored var addedProducts: [ProductModel] = [] {
+        @ObservationIgnored var addedProducts: [ProductUIModel] = [] {
             didSet {
                 testConvert(addedProducts)
             }
         }
 
+        private (set) var addedProductEvent = PassthroughSubject<AddedProductEvent, Never>()
+
         // MARK: - Initializers
 
-        init(productsListModel: ProductsListModel) {
+        init(productsListModel: ProductsListUIModel) {
             self.productsListModel = productsListModel
         }
 
@@ -75,7 +75,7 @@ extension CreateListView {
             }
         }
 
-        private func addProduct(product: ProductModel) {
+        private func addProduct(product: ProductUIModel) {
             if !addedProducts.contains(where: { $0.name == product.name}) {
                 addedProducts.append(product)
                 print("Added product \(product.name)")

@@ -8,7 +8,6 @@
 import Foundation
 
 extension MainView {
-    @MainActor
     @Observable
     final class ViewModel {
 
@@ -26,19 +25,19 @@ extension MainView {
             }
         }
 
-        var products: ProductsListModel {
+        var products: ProductsListUIModel {
             productsProvider.productList
         }
 
         private let folderProvider: FolderProvider
 
-        private let productsProvider: ProductsProvider
+        private let productsProvider: ProductsListUIProvider
 
         // MARK: - Initializers
 
-        init(folderProvider: FolderProvider, itemsProvider: ProductsProvider) {
+        init(folderProvider: FolderProvider, productsProvider: ProductsListUIProvider) {
             self.folderProvider = folderProvider
-            self.productsProvider = itemsProvider
+            self.productsProvider = productsProvider
 
             initializeFolders()
         }
@@ -58,7 +57,7 @@ extension MainView {
             id == selectedFolderID
         }
 
-        func getItems() -> ProductsListModel {
+        func getItems() -> ProductsListUIModel {
             productsProvider.productList
         }
 

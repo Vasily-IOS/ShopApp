@@ -24,7 +24,6 @@ struct ContentView: View {
                     }
                     .sheet(item: $router.sheet) { sheet in
                         router.build(sheet)
-                            .presentationDetents([.fraction(0.3)])
                     }
             }
             .environmentObject(router)

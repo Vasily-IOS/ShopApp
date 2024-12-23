@@ -11,7 +11,7 @@ struct ProductCategoryCell: View {
 
     // MARK: - Properties
 
-    let product: ProductModel
+    let product: ProductUIModel
 
     var body: some View {
         LabeledContent(product.name, value: "")

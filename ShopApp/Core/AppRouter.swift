@@ -14,9 +14,9 @@ final class AppRouter: ObservableObject {
 
     enum Page: Identifiable, Hashable {
         case main
-        case createList(ProductsListModel)
+        case createList(ProductsListUIModel)
         case settings
-        case productCategoryList(ProductCategoryModel)
+        case productCategoryList(ProductCategoryUIModel)
 
         var id: String {
             UUID().uuidString
@@ -25,6 +25,7 @@ final class AppRouter: ObservableObject {
 
     enum Sheet: Identifiable {
         case addItem(String, String, (String) -> ())
+        case productDetail
 
         var id: String {
             UUID().uuidString
@@ -82,6 +83,10 @@ final class AppRouter: ObservableObject {
                 placeholder: placeholder,
                 completion: completion
             )
+            .presentationDetents([.fraction(0.3)])
+        case .productDetail:
+            ViewFactory.productDetail.view
+                .presentationDetents([.large])
         }
     }
 }
