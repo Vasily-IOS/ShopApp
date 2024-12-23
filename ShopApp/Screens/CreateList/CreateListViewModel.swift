@@ -14,23 +14,19 @@ extension CreateListView {
 
         // MARK: - Properties
 
-        var sortedProducts: [ProductUIModel] = []
+        var searchText = ""
 
         var convertedAddedProducts: [(Int, [ProductUIModel])] = []
-
-        func testConvert(_ input: [ProductUIModel]) {
-            convertedAddedProducts = Array(Dictionary(grouping: input) { $0.category }).sorted(by: { $0.key > $1.key })
-        }
-
-        var inputText: String = ""
 
         let productsListModel: ProductsListUIModel
 
         @ObservationIgnored var addedProducts: [ProductUIModel] = [] {
             didSet {
-                testConvert(addedProducts)
+                makeReadableProducts(addedProducts)
             }
         }
+
+        private (set) var sortedProducts: [ProductUIModel] = []
 
         private (set) var addedProductEvent = PassthroughSubject<AddedProductEvent, Never>()
 
@@ -50,6 +46,8 @@ extension CreateListView {
                 sortProducts(by: text)
             case .addProduct(let product):
                 addProduct(product: product)
+            case .addProductToolBar:
+                addProductToolBar()
             }
         }
 
@@ -63,22 +61,42 @@ extension CreateListView {
 
         // MARK: - Private methods
 
+        private func makeReadableProducts(_ input: [ProductUIModel]) {
+            convertedAddedProducts = Array(Dictionary(grouping: input) { $0.category }).sorted(by: { $0.key > $1.key })
+        }
+
         private func clearInput() {
-            inputText.removeAll()
+            searchText.removeAll()
             sortedProducts.removeAll()
         }
 
         private func sortProducts(by string: String) {
             let findTargetString = string.trimmingCharacters(in: .whitespaces)
-            sortedProducts = productsListModel.allProducts.filter {
-                $0.name.lowercased().contains(findTargetString.lowercased())
-            }
+
+            sortedProducts = productsListModel.allProducts
+                .sorted(by: { $0.name.count < $1.name.count })
+                .filter {
+                    $0.name.lowercased().contains(findTargetString.lowercased())
+                }
         }
 
         private func addProduct(product: ProductUIModel) {
             if !addedProducts.contains(where: { $0.name == product.name}) {
                 addedProducts.append(product)
-                print("Added product \(product.name)")
+                searchText.removeAll()
+            }
+        }
+
+        private func addProductToolBar() {
+            let targetString = searchText.trimmingCharacters(in: .whitespaces)
+            if productsListModel.allProducts.contains(where: { $0.name == targetString })
+                && !addedProducts.contains(where: { $0.name == targetString }) {
+                if let product = productsListModel.allProducts.first(where: { $0.name == targetString }) {
+                    addedProducts.append(product)
+                    searchText.removeAll()
+                }
+            } else {
+                print("Надо добавить продукт в хранилище")
             }
         }
     }

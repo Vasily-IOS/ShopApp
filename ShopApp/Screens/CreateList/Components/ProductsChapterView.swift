@@ -12,24 +12,24 @@ struct ProductsChapterView: View {
 
     // MARK: - Properties
 
-    let cat: Cat
+    let productCategory: Cat
 
     var addedProductEvent: PassthroughSubject<AddedProductEvent, Never>
 
     var body: some View {
-        LabeledContent(cat.name, value: "")
+        LabeledContent(productCategory.name, value: "")
             .foregroundStyle(.gray)
             .font(.system(size: 16))
         VStack(spacing: 3) {
-            ForEach(cat.products) { product in
-                if cat.products.count == 1 {
+            ForEach(productCategory.products) { product in
+                if productCategory.products.count == 1 {
                     ProductCellView(product: product, addedProductEvent: addedProductEvent)
                         .cornerRadius(15, corners: .allCorners)
                 } else {
-                    if product.id == cat.products.first?.id {
+                    if product.id == productCategory.products.first?.id {
                         ProductCellView(product: product, addedProductEvent: addedProductEvent)
                             .cornerRadius(15, corners: [.topLeft, .topRight])
-                    } else if product.id == cat.products.last?.id {
+                    } else if product.id == productCategory.products.last?.id {
                         ProductCellView(product: product, addedProductEvent: addedProductEvent)
                             .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
                     } else {

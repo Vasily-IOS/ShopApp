@@ -35,7 +35,7 @@ enum ViewFactory {
             CreateListView(viewModel: viewModel)
         case .settings:
             SettingsView()
-        case .productCategoryList(let productsCategory):
+        case let .productCategoryList(productsCategory):
             let viewModel = ProductsCategoryListView.ViewModel(productsCategory: productsCategory)
             ProductsCategoryListView(viewModel: viewModel)
         case .productDetail:

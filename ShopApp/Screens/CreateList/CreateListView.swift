@@ -9,8 +9,8 @@ import SwiftUI
 import Combine
 
 enum AddedProductEvent {
-    case selected
-    case navigateToSettings
+    case selected(ProductUIModel)
+    case navigateToSettings(ProductUIModel)
 }
 
 struct CreateListView: View {
@@ -21,15 +21,30 @@ struct CreateListView: View {
 
     @EnvironmentObject var router: AppRouter
 
+//    @State var products = [ProductUIModel]()
+
     var body: some View {
+//        var productUIModelBindingWrapper = ProductUIModelBindingWrapper(bindingValue: $products)
         ScrollView(showsIndicators: false) {
             VStack(spacing: 10) {
                 HStack {
                     AssetImage.search.image
                         .padding(.leading, 7)
-                    TextField(AssetString.enterItemName.rawValue, text: $viewModel.inputText)
+                    TextField(AssetString.enterItemName.rawValue, text: $viewModel.searchText)
+                        .toolbar {
+                            if !viewModel.searchText.isEmpty {
+                                ToolbarItemGroup(placement: .keyboard) {
+                                    HStack {
+                                        Spacer()
+                                        Button("Добавить") {
+                                            viewModel.sendEvent(.addProductToolBar)
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     AssetImage.cross.image
-                        .hidden(viewModel.inputText.isEmpty)
+                        .hidden(viewModel.searchText.isEmpty)
                         .onTapGesture {
                             viewModel.sendEvent(.cleanInput)
                         }
@@ -89,7 +104,7 @@ struct CreateListView: View {
                     }
                 }
             }
-            .onChange(of: viewModel.inputText) { _, newValue in
+            .onChange(of: viewModel.searchText) { _, newValue in
                 viewModel.sendEvent(.sort(text: newValue))
             }
             .screenSettings(isSettingsButtonHidden: false) {
@@ -97,13 +112,15 @@ struct CreateListView: View {
             }
             .onReceive(viewModel.addedProductEvent) { event in
                 switch event {
-                case .navigateToSettings:
-                    print("navigateToSettings")
+                case .navigateToSettings(let product):
                     router.present(.productDetail)
-                case .selected:
-                    print("selected")
+                case .selected(let product):
+                    if let index = viewModel.addedProducts.firstIndex(of: product) {
+                        viewModel.addedProducts[index].isSelected.toggle()
+                    }
                 }
             }
         }
+        .scrollDismissesKeyboard(.immediately)
     }
 }

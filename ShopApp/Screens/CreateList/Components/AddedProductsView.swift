@@ -80,8 +80,8 @@ struct AddedProductsView: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            ForEach(products.map { Cat(cat: $0.0, products: $0.1) }) { cat in
-                ProductsChapterView(cat: cat, addedProductEvent: addedProductEvent)
+            ForEach(products.map { Cat(cat: $0.0, products: $0.1) }) { productCategory in
+                ProductsChapterView(productCategory: productCategory, addedProductEvent: addedProductEvent)
             }
         }
     }

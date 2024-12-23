@@ -18,6 +18,6 @@ struct ProductCategoryCell: View {
             .font(.system(size: 20))
             .padding(.leading, 16)
             .frame(height: 44)
-            .background(Color(uiColor: .mainBlue))
+            .background(Color(uiColor: product.isSelected ? .orange : .mainBlue))
     }
 }

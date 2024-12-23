@@ -11,4 +11,5 @@ enum CreateListEvent {
     case cleanInput
     case sort(text: String)
     case addProduct(ProductUIModel)
+    case addProductToolBar
 }

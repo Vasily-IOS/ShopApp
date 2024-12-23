@@ -15,15 +15,18 @@ extension ProductsCategoryListView {
 
         var searchText = ""
 
-        var sortedProductByCategory: [ProductUIModel] = []
+        let listDescription: String
 
-        let productsCategory: ProductCategoryUIModel
+        private (set) var products: [ProductUIModel] = []
+
+        private var originalProducts: [ProductUIModel] = []
 
         // MARK: - Initializers
 
         init(productsCategory: ProductCategoryUIModel) {
-            self.productsCategory = productsCategory
-            self.sortedProductByCategory = productsCategory.products
+            self.listDescription = productsCategory.name
+            self.originalProducts = productsCategory.products
+            self.products = productsCategory.products
         }
 
         // MARK: - Instance methods
@@ -33,24 +36,33 @@ extension ProductsCategoryListView {
             case .clearSearchText:
                 searchText.removeAll()
             case .sort:
-                sortedProductByCategory = searchText.isEmpty
-                ? productsCategory.products
-                : productsCategory.products.filter {
-                    $0.name.lowercased().contains(searchText.lowercased())
+                products = searchText.isEmpty
+                ? originalProducts
+                : originalProducts
+                    .sorted(by: { $0.name.count < $1.name.count })
+                    .filter {
+                        $0.name.lowercased().contains(searchText.lowercased())
+                    }
+            case .addProduct(let product):
+                if let index = originalProducts.firstIndex(of: product) {
+                    originalProducts[index].isSelected.toggle()
+                }
+                if let index = products.firstIndex(of: product) {
+                    products[index].isSelected.toggle()
                 }
             }
         }
 
         func isFirstProduct(id: Int) -> Bool {
-            id == sortedProductByCategory.first?.id ?? 0
+            id == products.first?.id ?? 0
         }
 
         func isLastProduct(id: Int) -> Bool {
-            id == sortedProductByCategory.last?.id ?? 0
+            id == products.last?.id ?? 0
         }
 
         func isOneOnly() -> Bool {
-            sortedProductByCategory.count == 1
+            products.count == 1
         }
     }
 }

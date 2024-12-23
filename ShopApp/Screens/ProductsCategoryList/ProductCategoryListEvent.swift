@@ -10,4 +10,5 @@ import Foundation
 enum ProductCategoryListEvent {
     case clearSearchText
     case sort
+    case addProduct(ProductUIModel)
 }

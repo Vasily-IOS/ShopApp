@@ -38,25 +38,37 @@ struct ProductsCategoryListView: View {
                 .padding(.top, 0)
 
                 VStack(spacing: 3) {
-                    ForEach(viewModel.sortedProductByCategory) { product in
+                    ForEach(viewModel.products) { product in
                         if viewModel.isFirstProduct(id: product.id) && !viewModel.isOneOnly() {
                             ProductCategoryCell(product: product)
                                 .cornerRadius(15, corners: .init([.topLeft, .topRight]))
-
+                                .onTapGesture {
+                                    viewModel.sendEvent(.addProduct(product))
+                                }
                         } else if viewModel.isLastProduct(id: product.id) && !viewModel.isOneOnly() {
                             ProductCategoryCell(product: product)
                                 .cornerRadius(15, corners: .init([.bottomLeft, .bottomRight]))
+                                .onTapGesture {
+                                    viewModel.sendEvent(.addProduct(product))
+                                }
                         } else if viewModel.isOneOnly() {
                             ProductCategoryCell(product: product)
                                 .cornerRadius(15, corners: .allCorners)
+                                .onTapGesture {
+                                    viewModel.sendEvent(.addProduct(product))
+                                }
                         } else {
                             ProductCategoryCell(product: product)
+                                .onTapGesture {
+                                    viewModel.sendEvent(.addProduct(product))
+                                }
                         }
                     }
                 }
                 .padding(.top, 10)
             }
-            .screenSettings(title: "Название списка")
+            .screenSettings(title: viewModel.listDescription)
         }
+        .scrollDismissesKeyboard(.immediately)
     }
 }

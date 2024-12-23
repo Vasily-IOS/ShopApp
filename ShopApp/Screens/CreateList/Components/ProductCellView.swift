@@ -16,24 +16,37 @@ struct ProductCellView: View {
 
     var addedProductEvent: PassthroughSubject<AddedProductEvent, Never>
 
+    @State private var isSelected = false
+
     var body: some View {
         HStack {
-            AssetImage.productSelect.image
+            (product.isSelected ? AssetImage.productSelected.image : AssetImage.productSelect.image)
                 .onTapGesture {
-                    addedProductEvent.send(.selected)
+                    addedProductEvent.send(.selected(product))
                 }
             Text(product.name)
-                .padding(.trailing, 16)
                 .font(.system(size: 20))
+                .background {
+                    Rectangle()
+                        .frame(height: 1)
+                        .hidden(!product.isSelected)
+                }
             Spacer()
             AssetImage.cardMenu.image
                 .padding(.trailing, 16)
                 .onTapGesture {
-                    addedProductEvent.send(.navigateToSettings)
+                    addedProductEvent.send(.navigateToSettings(product))
                 }
         }
         .padding(.leading, 16)
         .frame(height: 44)
-        .background(.orange)
+        .background(product.isSelected ? .orange.opacity(0.5) : .orange)
+        .onLongPressGesture {
+            addedProductEvent.send(.selected(product))
+            isSelected.toggle()
+        }
+//        .sensoryFeedback(.success, trigger: isSelected) { _, newValue in
+//            return newValue
+//        }
     }
 }
