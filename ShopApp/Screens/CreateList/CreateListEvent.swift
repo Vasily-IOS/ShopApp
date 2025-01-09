@@ -8,8 +8,8 @@
 import Foundation
 
 enum CreateListEvent {
-    case cleanInput
-    case sort(text: String)
+    case cleanSearchText
+    case sort
     case addProduct(ProductUIModel)
     case addProductToolBar
 }

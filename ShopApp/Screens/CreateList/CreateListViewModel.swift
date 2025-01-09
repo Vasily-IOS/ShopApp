@@ -18,9 +18,11 @@ extension CreateListView {
 
         var convertedAddedProducts: [(Int, [ProductUIModel])] = []
 
+        var transitionProducts = PassthroughSubject<ProductUIModel, Never>()
+
         let productsListModel: ProductsListUIModel
 
-        @ObservationIgnored var addedProducts: [ProductUIModel] = [] {
+        @ObservationIgnored private (set) var addedProducts: [ProductUIModel] = [] {
             didSet {
                 makeReadableProducts(addedProducts)
             }
@@ -40,10 +42,10 @@ extension CreateListView {
 
         func sendEvent(_ event: CreateListEvent) {
             switch event {
-            case .cleanInput:
-                clearInput()
-            case .sort(let text):
-                sortProducts(by: text)
+            case .cleanSearchText:
+                cleanSearchText()
+            case .sort:
+                sortProducts()
             case .addProduct(let product):
                 addProduct(product: product)
             case .addProductToolBar:
@@ -59,19 +61,40 @@ extension CreateListView {
             id == productsListModel.productsCategory.last?.id ?? 0
         }
 
+        func makeCategory(id: Int) -> ProductCategoryUIModel {
+            print("Maked category id: \(id)")
+            let category = productsListModel.productsCategory.first(where: { $0.id == id })!
+            let addedProducts = addedProducts.filter { $0.category == category.id }
+            let newProducts = category.products.map { product in
+                if addedProducts.contains(product) {
+                    return ProductUIModel(id: product.id, category: product.category, name: product.name, isSelected: product.isSelected)
+                }
+                return product
+            }.sorted(using: SortDescriptor(\.id))
+            return ProductCategoryUIModel(
+                id: category.id,
+                name: category.name,
+                products: newProducts
+            )
+        }
+
         // MARK: - Private methods
+
+        private func isProductSelected(id: Int) -> Bool {
+            addedProducts.contains(where: { $0.id == id })
+        }
 
         private func makeReadableProducts(_ input: [ProductUIModel]) {
             convertedAddedProducts = Array(Dictionary(grouping: input) { $0.category }).sorted(by: { $0.key > $1.key })
         }
 
-        private func clearInput() {
+        private func cleanSearchText() {
             searchText.removeAll()
             sortedProducts.removeAll()
         }
 
-        private func sortProducts(by string: String) {
-            let findTargetString = string.trimmingCharacters(in: .whitespaces)
+        private func sortProducts() {
+            let findTargetString = searchText.trimmingCharacters(in: .whitespaces)
 
             sortedProducts = productsListModel.allProducts
                 .sorted(by: { $0.name.count < $1.name.count })

@@ -11,6 +11,8 @@ struct BackButtonView: View {
 
     // MARK: - Properties
 
+    var onBackButtonTap: (() -> ())? = nil
+
     var backButtonTitle: LocalizedStringKey? = nil
 
     @Environment (\.colorScheme) var colorScheme
@@ -20,6 +22,7 @@ struct BackButtonView: View {
     var body: some View {
         HStack {
             Button(action: {
+                self.onBackButtonTap?()
                 self.presentationMode.wrappedValue.dismiss()
             }) {
                 HStack {

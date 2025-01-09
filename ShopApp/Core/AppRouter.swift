@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 @MainActor
 final class AppRouter: ObservableObject {
@@ -16,7 +17,7 @@ final class AppRouter: ObservableObject {
         case main
         case createList(ProductsListUIModel)
         case settings
-        case productCategoryList(ProductCategoryUIModel)
+//        case productCategoryList(ProductCategoryUIModel)
 
         var id: String {
             UUID().uuidString
@@ -69,8 +70,8 @@ final class AppRouter: ObservableObject {
             ViewFactory.createList(itemListModel).view
         case .settings:
             ViewFactory.settings.view
-        case .productCategoryList(let productCategory):
-            ViewFactory.productCategoryList(productCategory).view
+//        case .productCategoryList(let productCategory):
+//            ViewFactory.productCategoryList(productCategory).view
         }
     }
 

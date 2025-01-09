@@ -12,8 +12,6 @@ struct ProductsListModel: Equatable, Hashable {
     var productsCategory: [ProductCategoryJsonModel] = []
 }
 
-// !new!
-
 struct ProductUIModel: Codable, Identifiable, Hashable {
     let id: Int
     let category: Int

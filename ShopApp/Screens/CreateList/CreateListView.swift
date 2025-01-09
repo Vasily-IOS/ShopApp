@@ -21,10 +21,7 @@ struct CreateListView: View {
 
     @EnvironmentObject var router: AppRouter
 
-//    @State var products = [ProductUIModel]()
-
     var body: some View {
-//        var productUIModelBindingWrapper = ProductUIModelBindingWrapper(bindingValue: $products)
         ScrollView(showsIndicators: false) {
             VStack(spacing: 10) {
                 HStack {
@@ -46,7 +43,7 @@ struct CreateListView: View {
                     AssetImage.cross.image
                         .hidden(viewModel.searchText.isEmpty)
                         .onTapGesture {
-                            viewModel.sendEvent(.cleanInput)
+                            viewModel.sendEvent(.cleanSearchText)
                         }
                     Spacer()
                 }
@@ -73,7 +70,10 @@ struct CreateListView: View {
                     .padding(.vertical, 6)
                 }
 
-                AddedProductsView(products: $viewModel.convertedAddedProducts, addedProductEvent: viewModel.addedProductEvent)
+                AddedProductsView(
+                    products: $viewModel.convertedAddedProducts,
+                    addedProductEvent: viewModel.addedProductEvent
+                )
 
                 if !viewModel.addedProducts.isEmpty {
                     Color.black
@@ -84,41 +84,61 @@ struct CreateListView: View {
                 VStack(spacing: 3) {
                     ForEach(viewModel.productsListModel.productsCategory) { category in
                         if viewModel.isFirstCategory(id: category.id) {
-                            CategoryCellView(categoryName: category.name)
-                                .cornerRadius(15, corners: .init([.topLeft, .topRight]))
-                                .onTapGesture {
-                                    router.push(.productCategoryList(category))
-                                }
+                            ProductCategoryLink(
+                                name: category.name,
+                                destinationV: ProductsCategoryListView(
+                                    viewModel: ProductsCategoryListView.ViewModel(
+                                        productsCategory: viewModel.makeCategory(id: category.id)
+                                    ),
+                                    transitionProducts: viewModel.transitionProducts
+                                )
+                            )
+                            .cornerRadius(15, corners: .init([.topLeft, .topRight]))
                         } else if viewModel.isLastCategory(id: category.id) {
-                            CategoryCellView(categoryName: category.name)
-                                .cornerRadius(15, corners: .init([.bottomLeft, .bottomRight]))
-                                .onTapGesture {
-                                    router.push(.productCategoryList(category))
-                                }
+                            ProductCategoryLink(
+                                name: category.name,
+                                destinationV: ProductsCategoryListView(
+                                    viewModel: ProductsCategoryListView.ViewModel(
+                                        productsCategory: viewModel.makeCategory(id: category.id)
+                                    ),
+                                    transitionProducts: viewModel.transitionProducts
+                                )
+                            )
+                            .cornerRadius(15, corners: .init([.bottomLeft, .bottomRight]))
                         } else {
-                            CategoryCellView(categoryName: category.name)
-                                .onTapGesture {
-                                    router.push(.productCategoryList(category))
-                                }
+                            ProductCategoryLink(
+                                name: category.name,
+                                destinationV: ProductsCategoryListView(
+                                    viewModel: ProductsCategoryListView.ViewModel(
+                                        productsCategory: viewModel.makeCategory(id: category.id)
+                                    ),
+                                    transitionProducts: viewModel.transitionProducts
+                                )
+                            )
                         }
                     }
                 }
             }
-            .onChange(of: viewModel.searchText) { _, newValue in
-                viewModel.sendEvent(.sort(text: newValue))
+            .onChange(of: viewModel.searchText) {
+                viewModel.sendEvent(.sort)
             }
             .screenSettings(isSettingsButtonHidden: false) {
                 router.push(.settings)
             }
             .onReceive(viewModel.addedProductEvent) { event in
                 switch event {
-                case .navigateToSettings(let product):
+                case .navigateToSettings(_): // let product
                     router.present(.productDetail)
                 case .selected(let product):
-                    if let index = viewModel.addedProducts.firstIndex(of: product) {
-                        viewModel.addedProducts[index].isSelected.toggle()
-                    }
+                    print("Select product: \(product.name)")
+//                    if let index = viewModel.addedProducts.firstIndex(of: product) {
+//                        viewModel.addedProducts[index].isSelected.toggle()
+//                    }
                 }
+            }
+            .onReceive(viewModel.transitionProducts) { product in
+                print("Should add product from product category: \(product.name)")
+//                viewModel.sendEvent(.addProduct(product))
             }
         }
         .scrollDismissesKeyboard(.immediately)

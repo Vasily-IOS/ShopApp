@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 enum ViewFactory {
     case launchScreen
@@ -13,7 +14,7 @@ enum ViewFactory {
     case main
     case createList(ProductsListUIModel)
     case settings
-    case productCategoryList(ProductCategoryUIModel)
+//    case productCategoryList(ProductCategoryUIModel)
     case productDetail
 
     @MainActor
@@ -35,9 +36,9 @@ enum ViewFactory {
             CreateListView(viewModel: viewModel)
         case .settings:
             SettingsView()
-        case let .productCategoryList(productsCategory):
-            let viewModel = ProductsCategoryListView.ViewModel(productsCategory: productsCategory)
-            ProductsCategoryListView(viewModel: viewModel)
+//        case let .productCategoryList(productsCategory):
+//            let viewModel = ProductsCategoryListView.ViewModel(productsCategory: productsCategory)
+//            ProductsCategoryListView(viewModel: viewModel)
         case .productDetail:
             ProductDetailView()
         }

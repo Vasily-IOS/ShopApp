@@ -78,7 +78,7 @@ final class ProductsListUIProviderImpl: ProductsListUIProvider {
                 result.append(i)
             }
         }
-        return result
+        return result.sorted(using: SortDescriptor(\.id))
     }
 
     private func decodeCategoryItem(by type: ProductType) async -> ProductCategoryUIModel? {
