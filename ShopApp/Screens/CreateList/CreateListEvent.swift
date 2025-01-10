@@ -11,5 +11,7 @@ enum CreateListEvent {
     case cleanSearchText
     case sort
     case addProduct(ProductUIModel)
+    case removeProduct(ProductUIModel)
+    case toggleProductSelection(ProductUIModel)
     case addProductToolBar
 }

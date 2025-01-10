@@ -14,8 +14,6 @@ struct ProductsCategoryListView: View {
 
     @State var viewModel: ViewModel
 
-    var transitionProducts: PassthroughSubject<ProductUIModel, Never>
-
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
@@ -47,27 +45,23 @@ struct ProductsCategoryListView: View {
                                 .cornerRadius(15, corners: .init([.topLeft, .topRight]))
                                 .onTapGesture {
                                     viewModel.sendEvent(.addProduct(product))
-                                    transitionProducts.send(product)
                                 }
                         } else if viewModel.isLastProduct(id: product.id) && !viewModel.isOneOnly() {
                             ProductCategoryCell(product: product)
                                 .cornerRadius(15, corners: .init([.bottomLeft, .bottomRight]))
                                 .onTapGesture {
                                     viewModel.sendEvent(.addProduct(product))
-                                    transitionProducts.send(product)
                                 }
                         } else if viewModel.isOneOnly() {
                             ProductCategoryCell(product: product)
                                 .cornerRadius(15, corners: .allCorners)
                                 .onTapGesture {
                                     viewModel.sendEvent(.addProduct(product))
-                                    transitionProducts.send(product)
                                 }
                         } else {
                             ProductCategoryCell(product: product)
                                 .onTapGesture {
                                     viewModel.sendEvent(.addProduct(product))
-                                    transitionProducts.send(product)
                                 }
                         }
                     }

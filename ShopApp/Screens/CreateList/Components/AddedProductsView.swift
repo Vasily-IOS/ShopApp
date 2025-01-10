@@ -8,80 +8,79 @@
 import SwiftUI
 import Combine
 
-enum Category: String {
-    case fruits = "Овощи, фрукты и ягоды"
-    case breadAndPastries = "Хлеб и выпечка"
-    case milkAndCheese = "Молоко и сыр"
-    case meatAndFish = "Мясо и рыба"
-    case grainProducts = "Зерновые продукты"
-    case frozenAndReadyToCook = "Заморозка и полуфабрикаты"
-    case ingridientsAnfFlavforings = "Ингредиенты и специи"
-    case sweetsAndSnacks = "Закуски и сладости"
-    case drinks = "Напитки"
-    case houseHoldEssentials = "Домашнее хозяйство"
-    case healthAndBeauty = "Здоровье и красота"
-    case petCareEssentials = "Зоотовары"
-    case workTools = "Рабочие инструменты"
-
-    init?(rawValue: Int) {
-        switch rawValue {
-        case 1:
-            self = .fruits
-        case 2:
-            self = .breadAndPastries
-        case 3:
-            self = .milkAndCheese
-        case 4:
-            self = .meatAndFish
-        case 5:
-            self = .grainProducts
-        case 6:
-            self = .frozenAndReadyToCook
-        case 7:
-            self = .ingridientsAnfFlavforings
-        case 8:
-            self = .sweetsAndSnacks
-        case 9:
-            self = .drinks
-        case 10:
-            self = .houseHoldEssentials
-        case 11:
-            self = .healthAndBeauty
-        case 12:
-            self = .petCareEssentials
-        case  13:
-            self = .workTools
-        default:
-            return nil
-        }
-    }
-}
-
-struct Cat: Identifiable {
-    let id = UUID().uuidString
-    let cat: Int
-    let name: String
-    let products: [ProductUIModel]
-
-    init(cat: Int, products: [ProductUIModel]) {
-        self.cat = cat
-        self.name = Category(rawValue: cat)?.rawValue ?? ""
-        self.products = products
-    }
+enum AddedProductEvent {
+    case selected(ProductUIModel)
+    case navigateToSettings(ProductUIModel)
+    case removeProduct(ProductUIModel)
 }
 
 struct AddedProductsView: View {
 
     // MARK: - Properties
 
+    var addedProductEvent: PassthroughSubject<AddedProductEvent, Never>
+
     @Binding var products: [(Int, [ProductUIModel])]
 
-    var addedProductEvent: PassthroughSubject<AddedProductEvent, Never>
+    @State private var offset = 0.0
+
+    @State private var selectedCell: Int?
 
     var body: some View {
         VStack(spacing: 10) {
-            ForEach(products.map { Cat(cat: $0.0, products: $0.1) }) { productCategory in
-                ProductsChapterView(productCategory: productCategory, addedProductEvent: addedProductEvent)
+            ForEach(products.map { CategoryUIModel(cat: $0.0, products: $0.1) }, id: \.name) { category in
+                LabeledContent(category.name, value: "")
+                    .foregroundStyle(.gray)
+                    .font(.system(size: 16))
+                VStack(spacing: 3) {
+                    ForEach(category.products, id: \.self) { product in
+                        ProductCellView(
+                            addedProductEvent: addedProductEvent,
+                            product: product
+                        )
+                        .offset(x: (selectedCell ?? 0) == product.id ? offset : 0)
+                        .cornerRadius(15, corners: makeCorners(category: category, product: product))
+                        .gesture(
+                            DragGesture()
+                                .onChanged { value in
+                                    if 0 > value.translation.width {
+                                        selectedCell = product.id
+                                        offset = value.translation.width
+                                    }
+                                }
+                                .onEnded { value in
+                                    if value.translation.width < -100 {
+                                        withAnimation {
+                                            offset = 0.0
+                                            addedProductEvent.send(.removeProduct(product))
+                                            selectedCell = nil
+                                        }
+                                    } else {
+                                        withAnimation {
+                                            offset = 0.0
+                                            selectedCell = nil
+                                        }
+                                    }
+                                }
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: - Instance methods
+
+    private func makeCorners(category: CategoryUIModel, product: ProductUIModel) -> UIRectCorner {
+        if category.products.count == 1 {
+            return .allCorners
+        } else {
+            if product.id == category.products.first?.id {
+                return [.topLeft, .topRight]
+            } else if product.id == category.products.last?.id {
+                return [.bottomLeft, .bottomRight]
+            } else {
+                return []
             }
         }
     }

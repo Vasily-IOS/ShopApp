@@ -8,11 +8,6 @@
 import SwiftUI
 import Combine
 
-enum AddedProductEvent {
-    case selected(ProductUIModel)
-    case navigateToSettings(ProductUIModel)
-}
-
 struct CreateListView: View {
 
     // MARK: - Properties
@@ -24,6 +19,7 @@ struct CreateListView: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 10) {
+                // 1. Текстовый ввод для поиска товаров/продуктов
                 HStack {
                     AssetImage.search.image
                         .padding(.leading, 7)
@@ -54,6 +50,7 @@ struct CreateListView: View {
                 )
                 .padding(.top, 0)
 
+                // 2. Скролл с найденными товарами
                 if !viewModel.sortedProducts.isEmpty {
                     HStack {
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -70,77 +67,56 @@ struct CreateListView: View {
                     .padding(.vertical, 6)
                 }
 
+                // 3. Вьюха с добавленными товарами
                 AddedProductsView(
-                    products: $viewModel.convertedAddedProducts,
-                    addedProductEvent: viewModel.addedProductEvent
+                    addedProductEvent: viewModel.addedProductEvent,
+                    products: $viewModel.convertedAddedProducts
                 )
 
+                // 4. Разделитель, который появляется, если список добавленных товаров не пуст
                 if !viewModel.addedProducts.isEmpty {
                     Color.black
                         .frame(height: 1)
                         .padding(.vertical, 17)
                 }
 
+                // 5. Список категорий
                 VStack(spacing: 3) {
                     ForEach(viewModel.productsListModel.productsCategory) { category in
-                        if viewModel.isFirstCategory(id: category.id) {
-                            ProductCategoryLink(
-                                name: category.name,
-                                destinationV: ProductsCategoryListView(
-                                    viewModel: ProductsCategoryListView.ViewModel(
-                                        productsCategory: viewModel.makeCategory(id: category.id)
-                                    ),
-                                    transitionProducts: viewModel.transitionProducts
-                                )
-                            )
-                            .cornerRadius(15, corners: .init([.topLeft, .topRight]))
-                        } else if viewModel.isLastCategory(id: category.id) {
-                            ProductCategoryLink(
-                                name: category.name,
-                                destinationV: ProductsCategoryListView(
-                                    viewModel: ProductsCategoryListView.ViewModel(
-                                        productsCategory: viewModel.makeCategory(id: category.id)
-                                    ),
-                                    transitionProducts: viewModel.transitionProducts
-                                )
-                            )
-                            .cornerRadius(15, corners: .init([.bottomLeft, .bottomRight]))
-                        } else {
-                            ProductCategoryLink(
-                                name: category.name,
-                                destinationV: ProductsCategoryListView(
-                                    viewModel: ProductsCategoryListView.ViewModel(
-                                        productsCategory: viewModel.makeCategory(id: category.id)
-                                    ),
-                                    transitionProducts: viewModel.transitionProducts
-                                )
-                            )
-                        }
+                        ProductCategoryLink(name: category.name, destinationV: ProductsCategoryListView(viewModel: ProductsCategoryListView.ViewModel(productsCategory: category)))
+                            .cornerRadius(15, corners: makeCorners(id: category.id))
                     }
                 }
             }
-            .onChange(of: viewModel.searchText) {
-                viewModel.sendEvent(.sort)
-            }
             .screenSettings(isSettingsButtonHidden: false) {
                 router.push(.settings)
+            }
+            .onChange(of: viewModel.searchText) {
+                viewModel.sendEvent(.sort)
             }
             .onReceive(viewModel.addedProductEvent) { event in
                 switch event {
                 case .navigateToSettings(_): // let product
                     router.present(.productDetail)
                 case .selected(let product):
-                    print("Select product: \(product.name)")
-//                    if let index = viewModel.addedProducts.firstIndex(of: product) {
-//                        viewModel.addedProducts[index].isSelected.toggle()
-//                    }
+                    viewModel.sendEvent(.toggleProductSelection(product))
+                case .removeProduct(let product):
+                    viewModel.sendEvent(.removeProduct(product))
                 }
-            }
-            .onReceive(viewModel.transitionProducts) { product in
-                print("Should add product from product category: \(product.name)")
-//                viewModel.sendEvent(.addProduct(product))
             }
         }
         .scrollDismissesKeyboard(.immediately)
+    }
+
+    // MARK: - Instance methods
+
+    private func makeCorners(id: Int) -> UIRectCorner {
+        if id == viewModel.productsListModel.productsCategory.first?.id ?? 0 {
+            return [.topLeft, .topRight]
+        } else if id == viewModel.productsListModel.productsCategory.last?.id ?? 0 {
+            return [.bottomLeft, .bottomRight]
+        } else {
+            return []
+        }
     }
 }

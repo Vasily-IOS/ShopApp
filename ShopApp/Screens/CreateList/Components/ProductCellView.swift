@@ -12,11 +12,9 @@ struct ProductCellView: View {
 
     // MARK: - Properties
 
-    let product: ProductUIModel
-
     var addedProductEvent: PassthroughSubject<AddedProductEvent, Never>
 
-    @State private var isSelected = false
+    let product: ProductUIModel
 
     var body: some View {
         HStack {
@@ -43,10 +41,6 @@ struct ProductCellView: View {
         .background(product.isSelected ? .orange.opacity(0.5) : .orange)
         .onLongPressGesture {
             addedProductEvent.send(.selected(product))
-            isSelected.toggle()
         }
-//        .sensoryFeedback(.success, trigger: isSelected) { _, newValue in
-//            return newValue
-//        }
     }
 }
